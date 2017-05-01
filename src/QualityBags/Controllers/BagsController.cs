@@ -47,7 +47,7 @@ namespace QualityBags.Controllers
         public IActionResult Create()
         {
             ViewBag.CategoryNames = new SelectList(_context.Categories, "CategoryID", "CategoryName");
-            //dataValueField 'CategoryID' specifies the 'value' attribute in <select> is CategoryID
+            //dataValueField 'CategoryID' specifies the 'value' attribute in <option> is CategoryID
             //dataTextField 'CategoryName' specifies the 'text' attribute in <select> is CategoryName
             ViewBag.SupplierNames = new SelectList(_context.Suppliers, "SupplierID", "SupplierName");
             ViewData["CategoryID"] = new SelectList(_context.Categories, "CategoryID", "CategoryID");

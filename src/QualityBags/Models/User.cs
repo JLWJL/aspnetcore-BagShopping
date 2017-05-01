@@ -1,29 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
-using System.ComponentModel.DataAnnotations;
 
 namespace QualityBags.Models
 {
-    public class Supplier
+    public class User
     {
-        public int SupplierID { get; set; }
-        [Required]
+        public int UserID { get; set; }
+        [Display(Name ="First Name")]
         public string FirstName { get; set; }
-        [Required]
+        [Display(Name = "Last Name")]
         public string LastName { get; set; }
-        public string FullName
-        {
-            get {
-                return FirstName + " " + LastName;
-            }
-        }
 
         [Required,
         RegularExpression(@"[0-9]"),
-         MaxLength(11),
-         Display(Name = "Mobile Number")
+         StringLength(11),
+         Display(Name ="Mobile Number")
             ]
         public string PhoneMobile { get; set; }
         [Display(Name = "Home Number")]
@@ -31,8 +26,16 @@ namespace QualityBags.Models
         [Display(Name = "Work Number")]
         public string PhoneWork { get; set; }
         [Required]
+        [DataType(DataType.EmailAddress)]
         public string Email { get; set; }
+        [Required]
+        public string Address { get; set; }
 
-        public ICollection<Bag> Bags {get;set;}
+        [Display(Name = "Role")]
+        public int RoleID { get; set; }
+
+        //Navigation property
+        public Role Role { get; set; }
+
     }
 }
