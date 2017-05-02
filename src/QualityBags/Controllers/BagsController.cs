@@ -12,9 +12,9 @@ namespace QualityBags.Controllers
 {
     public class BagsController : Controller
     {
-        private readonly ShoppingContext _context;
+        private readonly ApplicationDbContext _context;
 
-        public BagsController(ShoppingContext context)
+        public BagsController(ApplicationDbContext context)
         {
             _context = context;    
         }

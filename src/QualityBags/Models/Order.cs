@@ -26,7 +26,7 @@ namespace QualityBags.Models
 
         //Navigation property
         public ICollection<OrderItem> OrderItems { get; set; }
-        public User Customer { get; set; }
+        public ApplicationUser User { get; set; }
 
     }
 }

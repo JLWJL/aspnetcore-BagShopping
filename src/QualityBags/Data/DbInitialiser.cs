@@ -8,7 +8,7 @@ namespace QualityBags.Data
 {
     public class DbInitialiser
     {
-        public static void Initialise(ShoppingContext context)
+        public static void Initialise(ApplicationDbContext context)
         {
             context.Database.EnsureCreated();
 

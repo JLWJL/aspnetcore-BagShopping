@@ -8,6 +8,17 @@ namespace QualityBags.Models.AccountViewModels
 {
     public class RegisterViewModel
     {
+        [Required,
+         Display(Name = "First Name"),
+         MaxLength(50)]
+        public string FirstName { get; set; }
+
+        [Required,
+        Display(Name = "Last Name"),
+         MaxLength(50)]
+        public string LastName { get; set; }
+
+
         [Required]
         [EmailAddress]
         [Display(Name = "Email")]
@@ -23,5 +34,24 @@ namespace QualityBags.Models.AccountViewModels
         [Display(Name = "Confirm password")]
         [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
         public string ConfirmPassword { get; set; }
+
+        [Required,
+        RegularExpression(@"[0-9]+", ErrorMessage = "Mobile number only contains digits 0-9"),
+         MaxLength(11),
+         Display(Name = "Mobile Number")
+            ]
+        public string PhoneMobile { get; set; }
+
+        [Display(Name = "Home Number"),
+        RegularExpression(@"[0-9]+", ErrorMessage = "Home phone number only contains digits 0-9")]
+        public string PhoneHome { get; set; }
+
+        [Display(Name = "Work Number"),
+        RegularExpression(@"[0-9]", ErrorMessage = "Work phone number only contains digits 0-9")]
+        public string PhoneWork { get; set; }
+
+        [Required,
+        MaxLength(50, ErrorMessage = "Address cannot be more than 50 characters.")]
+        public string Address { get; set; }
     }
 }
