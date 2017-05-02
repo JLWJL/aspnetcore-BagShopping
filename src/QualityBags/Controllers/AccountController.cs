@@ -57,8 +57,21 @@ namespace QualityBags.Controllers
             ViewData["ReturnUrl"] = returnUrl;
             if (ModelState.IsValid)
             {
-                // This doesn't count login failures towards account lockout
-                // To enable password failures to trigger account lockout, set lockoutOnFailure: true
+                var user = await _userManager.FindByEmailAsync(model.Email);
+                if (user != null)
+                {
+                    if (!user.Enabled)
+                    {
+                        ModelState.AddModelError("Disabled", "Your account is currently diabled, please contact the administrator team");
+                        return View(model);
+                    }
+                }
+
+                if (!await _userManager.IsEmailConfirmedAsync(user))
+                {
+                    ModelState.AddModelError("EmailNotConfirmed", "Please confirm registration email before logging in");
+                    return View(model);
+                }
                 var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, lockoutOnFailure: false);
                 if (result.Succeeded)
                 {
@@ -103,21 +116,31 @@ namespace QualityBags.Controllers
         public async Task<IActionResult> Register(RegisterViewModel model, string returnUrl = null)
         {
             ViewData["ReturnUrl"] = returnUrl;
+            ViewData["EmailConfirmed"] = false;
+
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
+                var user = new ApplicationUser {
+                    UserName = model.Email,
+                    Email = model.Email,
+                    Address = model.Address,
+                    FirstName = model.FirstName,
+                    LastName = model.LastName,
+                    PhoneMobile = model.PhoneMobile,
+                    PhoneHome = model.PhoneHome,
+                    PhoneWork = model.PhoneWork
+                };
+
                 var result = await _userManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
-                    // For more information on how to enable account confirmation and password reset please visit http://go.microsoft.com/fwlink/?LinkID=532713
-                    // Send an email with this link
-                    //var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-                    //var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: HttpContext.Request.Scheme);
-                    //await _emailSender.SendEmailAsync(model.Email, "Confirm your account",
-                    //    $"Please confirm your account by clicking this link: <a href='{callbackUrl}'>link</a>");
-                    await _signInManager.SignInAsync(user, isPersistent: false);
+                    var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+                    var url = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code },protocol:HttpContext.Request.Scheme);
+                    await _emailSender.SendEmailAsync(model.Email, "Email confirmation for registration", "Thanks for joining Quality Bags.\r\n"
+                        + "To complete the registration, please click the following link or copy and paste it in your browser.\r\n"
+                        +"<a href=\""+ url+ "\">link</a>)");
                     _logger.LogInformation(3, "User created a new account with password.");
-                    return RedirectToLocal(returnUrl);
+                    return View("ConfirmEmail");
                 }
                 AddErrors(result);
             }
@@ -231,6 +254,9 @@ namespace QualityBags.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> ConfirmEmail(string userId, string code)
         {
+
+            ViewData["EmailConfirmed"] = false;
+
             if (userId == null || code == null)
             {
                 return View("Error");
@@ -241,7 +267,15 @@ namespace QualityBags.Controllers
                 return View("Error");
             }
             var result = await _userManager.ConfirmEmailAsync(user, code);
-            return View(result.Succeeded ? "ConfirmEmail" : "Error");
+            if (result.Succeeded)
+            {
+                ViewData["EmailConfirmed"] = true;
+                return View("ConfirmEmail");
+            }
+            else
+            {
+                return View("Error");
+            }
         }
 
         //

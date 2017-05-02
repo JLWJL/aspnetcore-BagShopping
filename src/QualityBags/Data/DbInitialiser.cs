@@ -8,7 +8,7 @@ namespace QualityBags.Data
 {
     public class DbInitialiser
     {
-        public static void Initialise(ShoppingContext context)
+        public static void Initialise(ApplicationDbContext context)
         {
             context.Database.EnsureCreated();
 
@@ -19,10 +19,11 @@ namespace QualityBags.Data
 
             /*Pre-loading data*/
             var suppliers = new Supplier[] {
-                new Supplier{SupplierName = "Supplier1", Contact = 111111, Email="supplier1@bags.com"},
-                new Supplier{SupplierName = "Supplier2", Contact = 222222, Email="supplier2@bags.com"},
-                new Supplier{SupplierName = "Supplier3", Contact = 333333, Email="supplier3@bags.com"},
+                new Supplier{FirstName  = "Supplier1", LastName="1", PhoneMobile = "022121211", Email="supplier1@bags.com"},
+                new Supplier{FirstName = "Supplier2", LastName ="2", PhoneMobile = "022121212", Email="supplier2@bags.com"},
+                new Supplier{FirstName = "Supplier2", LastName ="3", PhoneMobile = "022121213", Email="supplier3@bags.com"},
             };
+
             foreach (var s in suppliers)
             {
                 context.Suppliers.Add(s);

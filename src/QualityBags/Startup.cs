@@ -12,6 +12,7 @@ using Microsoft.Extensions.Logging;
 using QualityBags.Data;
 using QualityBags.Models;
 using QualityBags.Services;
+using Microsoft.AspNetCore.Identity;
 
 namespace QualityBags
 {
@@ -51,7 +52,10 @@ namespace QualityBags
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
-            services.AddIdentity<ApplicationUser, IdentityRole>()
+            services.AddIdentity<ApplicationUser, IdentityRole>(config=>
+            {
+                config.SignIn.RequireConfirmedEmail = true;
+            })
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
 
@@ -62,8 +66,57 @@ namespace QualityBags
             services.AddTransient<ISmsSender, AuthMessageSender>();
         }
 
+
+        //Create super user at the beginning
+        private async Task CreateRoles(IServiceProvider serviceProvider)
+        {
+            var RoleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+            var UserManager = serviceProvider.GetRequiredService<UserManager<ApplicationUser>>();
+
+            /*Create roles for system*/
+            string[] Roles = { "Admin", "Customer" };
+            IdentityResult roleResult;
+            foreach(var role in Roles)
+            {
+                var roleExistance = await RoleManager.RoleExistsAsync(role);
+                if (!roleExistance)
+                {
+                    roleResult = await RoleManager.CreateAsync(new IdentityRole(role));
+                }
+            }
+
+            /*Create super user and assign it to role 'Admin'*/
+            var _user = await UserManager.FindByEmailAsync(Configuration.GetSection("UserSettings")["Email"]);
+            if(_user == null)
+            {
+                var password = Configuration.GetSection("UserSettings")["Password"];
+                var superUser = new ApplicationUser
+                {
+                    FirstName = "Junlong",
+                    LastName = "Wang",
+                    UserName = Configuration.GetSection("UserSettings")["Email"],
+                    Email = Configuration.GetSection("UserSettings")["Email"],
+                    EmailConfirmed = true,
+                    Address="Quality Bags New Zealand",
+                    PhoneMobile = "021111000",
+                    Enabled = true
+                };
+                var createSuperUserResult = await UserManager.CreateAsync(superUser, password);
+                if (createSuperUserResult.Succeeded)
+                {
+                    await UserManager.AddToRoleAsync(superUser, "Admin");
+                }
+            }
+
+
+        }
+
+
+
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, ShoppingContext context)
+        public async void Configure(IApplicationBuilder app, IHostingEnvironment env,
+                        ILoggerFactory loggerFactory, ApplicationDbContext context,
+                        UserManager<ApplicationUser> userManager, IServiceProvider serviceProvider)
         {
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
@@ -97,6 +150,21 @@ namespace QualityBags
             });
 
             DbInitialiser.Initialise(context);
+            await CreateRoles(serviceProvider);
+
+            /*Assign other users to 'Customer' category*/
+            ICollection<ApplicationUser> appUsers = context.ApplicationUsers.ToList();
+            if (appUsers.Count > 0)
+            {
+                foreach(var user in appUsers)
+                {
+                    var roleCount = userManager.GetRolesAsync(user).Result.Count();
+                    if (roleCount < 1)//If user doesn't have a role 
+                    {
+                        await userManager.AddToRoleAsync(user, "Customer");
+                    }
+                }
+            }
         }
     }
 }
