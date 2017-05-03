@@ -6,12 +6,19 @@
 
 <h2>Edit</h2>
 
-<form asp-action="Edit">
+<form asp-action="Edit" enctype="multipart/form-data">
     <div class="form-horizontal">
         <h4>Bag</h4>
         <hr />
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
     <input type="hidden" asp-for="BagID" />
+        <div class="form-group">
+            <label asp-for="ImagePath" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <img src="@Model.ImagePath" alt="Bag Image" style="width:100px;height:100px;border:1px solid grey" />
+                <input type="file" id="uploadFile" name="uploadFile" value="Change"/>
+            </div>
+        </div>
         <div class="form-group">
             <label asp-for="BagName" class="col-md-2 control-label"></label>
             <div class="col-md-10">
@@ -22,7 +29,7 @@
         <div class="form-group">
             <label asp-for="CategoryID" class="control-label col-md-2"></label>
             <div class="col-md-10">
-                <select asp-for="CategoryID" class="form-control" asp-items="ViewBag.CategoryID"></select>
+                <select asp-for="CategoryID" class="form-control" asp-items="ViewBag.CategoryNames"></select>
                 <span asp-validation-for="CategoryID" class="text-danger" />
             </div>
         </div>
@@ -33,13 +40,7 @@
                 <span asp-validation-for="Description" class="text-danger" />
             </div>
         </div>
-        <div class="form-group">
-            <label asp-for="ImagePath" class="col-md-2 control-label"></label>
-            <div class="col-md-10">
-                <input asp-for="ImagePath" class="form-control" />
-                <span asp-validation-for="ImagePath" class="text-danger" />
-            </div>
-        </div>
+
         <div class="form-group">
             <label asp-for="Price" class="col-md-2 control-label"></label>
             <div class="col-md-10">
@@ -50,7 +51,7 @@
         <div class="form-group">
             <label asp-for="SupplierID" class="control-label col-md-2"></label>
             <div class="col-md-10">
-                <select asp-for="SupplierID" class="form-control" asp-items="ViewBag.SupplierID"></select>
+                <select asp-for="SupplierID" class="form-control" asp-items="ViewBag.SupplierNames"></select>
                 <span asp-validation-for="SupplierID" class="text-danger" />
             </div>
         </div>

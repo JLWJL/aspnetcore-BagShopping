@@ -9,7 +9,7 @@ namespace QualityBags.Models
     public class Bag
     {
         public int BagID { get; set; }
-        [Required]
+        [Required,Display(Name ="Bag Name")]
         public string BagName { get; set; }
         [Required]
         public double Price { get; set; }

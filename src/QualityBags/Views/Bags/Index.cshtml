@@ -11,6 +11,9 @@
     <thead>
         <tr>
             <th>
+                @Html.DisplayNameFor(model => model.ImagePath)
+            </th>
+            <th>
                 @Html.DisplayNameFor(model => model.BagName)
             </th>
             <th>
@@ -27,7 +30,11 @@
     </thead>
     <tbody>
 @foreach (var item in Model) {
+    var errImg = Href("~/images/Bags/Default.jpg");
         <tr>
+            <td>
+                <img src="@item.ImagePath" alt="Bag image" style="width:100px; height:100px" onerror="this.onerror=null;this.src='@errImg'"/>
+            </td>
             <td>
                 @Html.DisplayFor(modelItem => item.BagName)
             </td>

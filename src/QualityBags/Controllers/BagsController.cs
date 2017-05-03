@@ -8,6 +8,10 @@ using Microsoft.EntityFrameworkCore;
 using QualityBags.Data;
 using QualityBags.Models;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
+using System.Net.Http.Headers;
+using System.IO;
+using Microsoft.AspNetCore.Hosting;
 
 namespace QualityBags.Controllers
 {
@@ -15,10 +19,12 @@ namespace QualityBags.Controllers
     public class BagsController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly IHostingEnvironment _hostingEnv;
 
-        public BagsController(ApplicationDbContext context)
+        public BagsController(ApplicationDbContext context, IHostingEnvironment hstEnv)
         {
-            _context = context;    
+            _context = context;
+            _hostingEnv = hstEnv;  
         }
 
         // GET: Bags
@@ -48,12 +54,8 @@ namespace QualityBags.Controllers
         // GET: Bags/Create
         public IActionResult Create()
         {
-            ViewBag.CategoryNames = new SelectList(_context.Categories, "CategoryID", "CategoryName");
-            //dataValueField 'CategoryID' specifies the 'value' attribute in <option> is CategoryID
-            //dataTextField 'CategoryName' specifies the 'text' attribute in <select> is CategoryName
-            ViewBag.SupplierNames = new SelectList(_context.Suppliers, "SupplierID", "FullName");
-            ViewData["CategoryID"] = new SelectList(_context.Categories, "CategoryID", "CategoryID");
-            ViewData["SupplierID"] = new SelectList(_context.Suppliers, "SupplierID", "SupplierID");
+            PopulateCategoryList();
+            PopulateSupplierList();
             return View();
         }
 
@@ -62,16 +64,45 @@ namespace QualityBags.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("BagID,BagName,CategoryID,Description,ImagePath,Price,SupplierID")] Bag bag)
+        public async Task<IActionResult> Create([Bind("BagID,BagName,CategoryID,Description,Price,SupplierID")] Bag bag, IFormFile uploadFile)
         {
-            if (ModelState.IsValid)
+            var relativeDir = "";
+            var fileName = "";
+
+            if (uploadFile == null)
             {
-                _context.Add(bag);
-                await _context.SaveChangesAsync();
-                return RedirectToAction("Index");
+                relativeDir = "/images/Bags/Default.jpg";
             }
-            ViewData["CategoryID"] = new SelectList(_context.Categories, "CategoryID", "CategoryID", bag.CategoryID);
-            ViewData["SupplierID"] = new SelectList(_context.Suppliers, "SupplierID", "SupplierID", bag.SupplierID);
+            else
+            {
+                fileName = ContentDispositionHeaderValue.Parse(uploadFile.ContentDisposition)
+                                                                .FileName.Trim('"');
+                relativeDir = "/images/Bags/"+ bag.BagName + "_" + fileName;
+                using(FileStream fs = System.IO.File.Create(_hostingEnv.WebRootPath + relativeDir))
+                {
+                    await uploadFile.CopyToAsync(fs);
+                    fs.Flush();
+                }
+            }
+            bag.ImagePath = relativeDir;
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    _context.Add(bag);
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction("Index");
+                }
+                PopulateCategoryList(bag.CategoryID);
+                PopulateSupplierList(bag.SupplierID);
+            }
+            catch(DbUpdateException)
+            {
+                ModelState.AddModelError("Image error", "Unable to uploade images for product. " +
+                    "Try again, and if the problem persists " +
+                    "contact your system administrator.");
+            }
+            
             return View(bag);
         }
 
@@ -88,8 +119,8 @@ namespace QualityBags.Controllers
             {
                 return NotFound();
             }
-            ViewData["CategoryID"] = new SelectList(_context.Categories, "CategoryID", "CategoryID", bag.CategoryID);
-            ViewData["SupplierID"] = new SelectList(_context.Suppliers, "SupplierID", "SupplierID", bag.SupplierID);
+            PopulateCategoryList(bag.CategoryID);
+            PopulateSupplierList(bag.SupplierID);
             return View(bag);
         }
 
@@ -98,36 +129,47 @@ namespace QualityBags.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("BagID,BagName,CategoryID,Description,ImagePath,Price,SupplierID")] Bag bag)
+        public async Task<IActionResult> Edit(int? id, IFormFile uploadFile)
         {
-            if (id != bag.BagID)
+            if (id == null)
             {
                 return NotFound();
             }
+            var editedBag = await _context.Bags.SingleOrDefaultAsync(b=>b.BagID==id);
 
-            if (ModelState.IsValid)
+            if (uploadFile != null)
+            { 
+                var fileName = ContentDispositionHeaderValue.Parse(uploadFile.ContentDisposition)
+                                                                    .FileName.Trim('"');
+                var relativeDir = "/images/Bags/" + editedBag.BagName + "_" + fileName;
+                    using (FileStream fs = System.IO.File.Create(_hostingEnv.WebRootPath + relativeDir))
+                    {
+                        await uploadFile.CopyToAsync(fs);
+                        fs.Flush();
+                    }
+
+                editedBag.ImagePath = relativeDir;
+            }
+
+            if (await TryUpdateModelAsync<Bag>(
+                editedBag,
+                "",
+                b=>b.BagName, b=>b.Description, b => b.Price,
+                b=>b.Description, b=>b.SupplierID, b => b.CategoryID))
             {
                 try
                 {
-                    _context.Update(bag);
                     await _context.SaveChangesAsync();
+                    return RedirectToAction("Index");
                 }
-                catch (DbUpdateConcurrencyException)
+                catch (DbUpdateException)
                 {
-                    if (!BagExists(bag.BagID))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
+                    ModelState.AddModelError("", "Error occurs when saving changes, try again or contact administrator");
                 }
-                return RedirectToAction("Index");
             }
-            ViewData["CategoryID"] = new SelectList(_context.Categories, "CategoryID", "CategoryID", bag.CategoryID);
-            ViewData["SupplierID"] = new SelectList(_context.Suppliers, "SupplierID", "SupplierID", bag.SupplierID);
-            return View(bag);
+            return View(editedBag);
+
+            
         }
 
         // GET: Bags/Delete/5
@@ -162,5 +204,24 @@ namespace QualityBags.Controllers
         {
             return _context.Bags.Any(e => e.BagID == id);
         }
+
+        #region MyRegion
+        private void PopulateCategoryList(object selectedCategory = null)
+        {
+            var categories = from cat in _context.Categories
+                             orderby cat.CategoryID
+                             select cat;
+            ViewBag.CategoryNames = new SelectList(_context.Categories, "CategoryID", "CategoryName", selectedCategory);
+        }
+
+        private void PopulateSupplierList(object selectedSupplier = null)
+        {
+            var suppliers = from s in _context.Suppliers
+                             orderby s.SupplierID
+                             select s;
+            ViewBag.SupplierNames = new SelectList(_context.Suppliers, "SupplierID", "FullName", selectedSupplier);
+        }
+        #endregion
     }
+
 }
