@@ -7,9 +7,11 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using QualityBags.Data;
 using QualityBags.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace QualityBags.Controllers
 {
+    [Authorize(Roles ="Admin")]
     public class BagsController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -49,7 +51,7 @@ namespace QualityBags.Controllers
             ViewBag.CategoryNames = new SelectList(_context.Categories, "CategoryID", "CategoryName");
             //dataValueField 'CategoryID' specifies the 'value' attribute in <option> is CategoryID
             //dataTextField 'CategoryName' specifies the 'text' attribute in <select> is CategoryName
-            ViewBag.SupplierNames = new SelectList(_context.Suppliers, "SupplierID", "SupplierName");
+            ViewBag.SupplierNames = new SelectList(_context.Suppliers, "SupplierID", "FullName");
             ViewData["CategoryID"] = new SelectList(_context.Categories, "CategoryID", "CategoryID");
             ViewData["SupplierID"] = new SelectList(_context.Suppliers, "SupplierID", "SupplierID");
             return View();

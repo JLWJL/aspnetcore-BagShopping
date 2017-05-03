@@ -14,6 +14,7 @@ namespace QualityBags.Models
         [Required]
         public double Price { get; set; }
         public string Description { get; set; }
+        [Display(Name ="Image")]
         public string ImagePath { get; set; }
 
         [Required]

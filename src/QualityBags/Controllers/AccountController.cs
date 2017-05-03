@@ -57,7 +57,7 @@ namespace QualityBags.Controllers
             ViewData["ReturnUrl"] = returnUrl;
             if (ModelState.IsValid)
             {
-                var user = await _userManager.FindByEmailAsync(model.Email);
+                ApplicationUser user = await _userManager.FindByEmailAsync(model.Email.ToString());
                 if (user != null)
                 {
                     if (!user.Enabled)
@@ -65,17 +65,18 @@ namespace QualityBags.Controllers
                         ModelState.AddModelError("Disabled", "Your account is currently diabled, please contact the administrator team");
                         return View(model);
                     }
+                    if (!await _userManager.IsEmailConfirmedAsync(user))
+                    {
+                        ModelState.AddModelError("EmailNotConfirmed", "Please confirm registration email before logging in");
+                        return View(model);
+                    }
                 }
 
-                if (!await _userManager.IsEmailConfirmedAsync(user))
-                {
-                    ModelState.AddModelError("EmailNotConfirmed", "Please confirm registration email before logging in");
-                    return View(model);
-                }
+
                 var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, lockoutOnFailure: false);
                 if (result.Succeeded)
                 {
-                    _logger.LogInformation(1, "User logged in.");
+                    _logger.LogInformation(1, "User "+user.Id+" logged in.");
                     return RedirectToLocal(returnUrl);
                 }
                 if (result.RequiresTwoFactor)
@@ -128,7 +129,8 @@ namespace QualityBags.Controllers
                     LastName = model.LastName,
                     PhoneMobile = model.PhoneMobile,
                     PhoneHome = model.PhoneHome,
-                    PhoneWork = model.PhoneWork
+                    PhoneWork = model.PhoneWork,
+                    Enabled = true
                 };
 
                 var result = await _userManager.CreateAsync(user, model.Password);
@@ -471,7 +473,6 @@ namespace QualityBags.Controllers
         }
 
         #region Helpers
-
         private void AddErrors(IdentityResult result)
         {
             foreach (var error in result.Errors)

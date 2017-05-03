@@ -5,12 +5,13 @@ using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using QualityBags.Data;
 
-namespace QualityBags.Data.Migrations
+namespace QualityBags.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20170502223332_RedesignModels")]
+    partial class RedesignModels
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "1.0.1")
@@ -129,26 +130,21 @@ namespace QualityBags.Data.Migrations
 
                     b.Property<int>("AccessFailedCount");
 
-                    b.Property<string>("Address")
-                        .IsRequired()
-                        .HasAnnotation("MaxLength", 50);
+                    b.Property<string>("Address");
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken();
 
                     b.Property<string>("Email")
-                        .IsRequired()
                         .HasAnnotation("MaxLength", 256);
 
                     b.Property<bool>("EmailConfirmed");
 
-                    b.Property<string>("FirstName")
-                        .IsRequired()
-                        .HasAnnotation("MaxLength", 50);
+                    b.Property<bool>("Enabled");
 
-                    b.Property<string>("LastName")
-                        .IsRequired()
-                        .HasAnnotation("MaxLength", 50);
+                    b.Property<string>("FirstName");
+
+                    b.Property<string>("LastName");
 
                     b.Property<bool>("LockoutEnabled");
 
@@ -164,9 +160,7 @@ namespace QualityBags.Data.Migrations
 
                     b.Property<string>("PhoneHome");
 
-                    b.Property<string>("PhoneMobile")
-                        .IsRequired()
-                        .HasAnnotation("MaxLength", 11);
+                    b.Property<string>("PhoneMobile");
 
                     b.Property<string>("PhoneNumber");
 

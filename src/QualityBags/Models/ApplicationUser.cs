@@ -10,7 +10,7 @@ namespace QualityBags.Models
 {
     public class ApplicationUser:IdentityUser
     {
-        public bool Enabled = true;
+        public bool Enabled { get; set; }
 
         public string FirstName { get; set; }
 
@@ -21,8 +21,6 @@ namespace QualityBags.Models
         public string PhoneHome { get; set; }
 
         public string PhoneWork { get; set; }
-
-        public new string Email { get; set; }
 
         public string Address { get; set; }
     }

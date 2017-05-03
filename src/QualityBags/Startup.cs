@@ -46,8 +46,6 @@ namespace QualityBags
             // Add framework services.
             services.AddApplicationInsightsTelemetry(Configuration);
 
-            services.AddDbContext<ShoppingContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
@@ -66,51 +64,7 @@ namespace QualityBags
             services.AddTransient<ISmsSender, AuthMessageSender>();
         }
 
-
-        //Create super user at the beginning
-        private async Task CreateRoles(IServiceProvider serviceProvider)
-        {
-            var RoleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
-            var UserManager = serviceProvider.GetRequiredService<UserManager<ApplicationUser>>();
-
-            /*Create roles for system*/
-            string[] Roles = { "Admin", "Customer" };
-            IdentityResult roleResult;
-            foreach(var role in Roles)
-            {
-                var roleExistance = await RoleManager.RoleExistsAsync(role);
-                if (!roleExistance)
-                {
-                    roleResult = await RoleManager.CreateAsync(new IdentityRole(role));
-                }
-            }
-
-            /*Create super user and assign it to role 'Admin'*/
-            var _user = await UserManager.FindByEmailAsync(Configuration.GetSection("UserSettings")["Email"]);
-            if(_user == null)
-            {
-                var password = Configuration.GetSection("UserSettings")["Password"];
-                var superUser = new ApplicationUser
-                {
-                    FirstName = "Junlong",
-                    LastName = "Wang",
-                    UserName = Configuration.GetSection("UserSettings")["Email"],
-                    Email = Configuration.GetSection("UserSettings")["Email"],
-                    EmailConfirmed = true,
-                    Address="Quality Bags New Zealand",
-                    PhoneMobile = "021111000",
-                    Enabled = true
-                };
-                var createSuperUserResult = await UserManager.CreateAsync(superUser, password);
-                if (createSuperUserResult.Succeeded)
-                {
-                    await UserManager.AddToRoleAsync(superUser, "Admin");
-                }
-            }
-
-
-        }
-
+       
 
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -166,5 +120,52 @@ namespace QualityBags
                 }
             }
         }
+
+        #region Helpers
+        //Create super user at the beginning
+        private async Task CreateRoles(IServiceProvider serviceProvider)
+        {
+            var RoleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+            var UserManager = serviceProvider.GetRequiredService<UserManager<ApplicationUser>>();
+
+            /*Create roles for system*/
+            string[] Roles = { "Admin", "Customer" };
+            IdentityResult roleResult;
+            foreach (var role in Roles)
+            {
+                var roleExistance = await RoleManager.RoleExistsAsync(role);
+                if (!roleExistance)
+                {
+                    roleResult = await RoleManager.CreateAsync(new IdentityRole(role));
+                }
+            }
+
+            /*Create super user and assign it to role 'Admin'*/
+            var _user = await UserManager.FindByEmailAsync(Configuration.GetSection("UserSettings")["Email"]);
+            if (_user == null)
+            {
+                var password = Configuration.GetSection("UserSettings")["Password"];
+                var superUser = new ApplicationUser
+                {
+                    FirstName = "Junlong",
+                    LastName = "Wang",
+                    UserName = Configuration.GetSection("UserSettings")["Email"],
+                    Email = Configuration.GetSection("UserSettings")["Email"],
+                    EmailConfirmed = true,
+                    Address = "Quality Bags New Zealand",
+                    PhoneMobile = "021111000",
+                    Enabled = true
+                };
+                var createSuperUserResult = await UserManager.CreateAsync(superUser, password);
+                if (createSuperUserResult.Succeeded)
+                {
+                    await UserManager.AddToRoleAsync(superUser, "Admin");
+                }
+            }
+
+
+        }
+        #endregion
+
     }
 }
