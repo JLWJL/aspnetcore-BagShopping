@@ -51,14 +51,26 @@
         <div class="container">
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li><a asp-area="" asp-controller="Bags" asp-action="Index">Bags</a></li>
+                    <li><a asp-area="" asp-controller="CustomerBags" asp-action="Index">Bags</a></li>
                     <li><a asp-area="" asp-controller="Bags" asp-action="Index">WOMEN</a></li>
                     <li><a asp-area="" asp-controller="Bags" asp-action="Index">CHILDREN</a></li>
                     <li><a asp-area="" asp-controller="Home" asp-action="About">ABOUT US</a></li>
                     <li><a asp-area="" asp-controller="Home" asp-action="Contact">CONTACT</a></li>
                     @if (User.IsInRole("Admin"))
                     {
-                        <li><a asp-area="" asp-controller="Admin" asp-action="Index">Members</a></li>
+                        <li class="dropdown">
+                           
+                                <a class="dropdown-toggle" data-toggle="dropdown">Admin<span class="caret"></span></a>
+                                <ul class="dropdown-menu">
+                                    <li><a asp-controller="Admin" asp-action="Index">Customers</a></li>
+                                    <li><a asp-controller="Bags" asp-action="Index">Bags</a></li>
+                                    <li><a asp-controller="Categories" asp-action="Index">Categories</a></li>
+                                    <li><a asp-controller="Suppliers" asp-action="Index">Suppliers</a></li>
+                                    <li><a asp-controller="" asp-action="">Orders</a></li>
+                                    <li><a href=""></a></li>
+                                </ul>
+
+                        </li>
                     }
                     @*@await Html.PartialAsync("_LoginPartial")*@
                 </ul>

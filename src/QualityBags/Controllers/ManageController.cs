@@ -56,11 +56,17 @@ namespace QualityBags.Controllers
             }
             var model = new IndexViewModel
             {
+           
                 HasPassword = await _userManager.HasPasswordAsync(user),
                 PhoneNumber = await _userManager.GetPhoneNumberAsync(user),
                 TwoFactor = await _userManager.GetTwoFactorEnabledAsync(user),
                 Logins = await _userManager.GetLoginsAsync(user),
-                BrowserRemembered = await _signInManager.IsTwoFactorClientRememberedAsync(user)
+                BrowserRemembered = await _signInManager.IsTwoFactorClientRememberedAsync(user),
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                PhoneMobile = user.PhoneMobile,
+                Address = user.Address,
+                Email = user.Email
             };
             return View(model);
         }

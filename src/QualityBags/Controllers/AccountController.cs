@@ -41,9 +41,9 @@ namespace QualityBags.Controllers
         // GET: /Account/Login
         [HttpGet]
         [AllowAnonymous]
-        public IActionResult Login(string returnUrl = null)
+        public IActionResult Login(string returnurl = null)
         {
-            ViewData["ReturnUrl"] = returnUrl;
+            ViewData["ReturnUrl"] = returnurl;
             return View();
         }
 
@@ -52,9 +52,9 @@ namespace QualityBags.Controllers
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Login(LoginViewModel model, string returnUrl = null)
+        public async Task<IActionResult> Login(LoginViewModel model, string returnurl = null)
         {
-            ViewData["ReturnUrl"] = returnUrl;
+            ViewData["ReturnUrl"] = returnurl;
             if (ModelState.IsValid)
             {
                 ApplicationUser user = await _userManager.FindByEmailAsync(model.Email.ToString());
@@ -77,11 +77,11 @@ namespace QualityBags.Controllers
                 if (result.Succeeded)
                 {
                     _logger.LogInformation(1, "User "+user.Id+" logged in.");
-                    return RedirectToLocal(returnUrl);
+                    return RedirectToLocal(returnurl);
                 }
                 if (result.RequiresTwoFactor)
                 {
-                    return RedirectToAction(nameof(SendCode), new { ReturnUrl = returnUrl, RememberMe = model.RememberMe });
+                    return RedirectToAction(nameof(SendCode), new { ReturnUrl = returnurl, RememberMe = model.RememberMe });
                 }
                 if (result.IsLockedOut)
                 {

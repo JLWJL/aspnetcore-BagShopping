@@ -10,7 +10,7 @@ namespace QualityBags.Models
         public int ID { get; set; }
 
         //ID referring to ShoppingCart
-        public int CartID { get; set; }
+        public string CartID { get; set; }
 
         public int Count { get; set; }
         public DateTime DateCreated { get; set; }

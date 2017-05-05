@@ -12,7 +12,7 @@ namespace QualityBags.Models
         [Required,Display(Name ="Bag Name")]
         public string BagName { get; set; }
         [Required]
-        public double Price { get; set; }
+        public decimal Price { get; set; }
         public string Description { get; set; }
         [Display(Name ="Image")]
         public string ImagePath { get; set; }

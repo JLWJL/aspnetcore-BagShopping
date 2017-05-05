@@ -45,11 +45,11 @@ namespace QualityBags.Data
 
             var bags = new Bag[]
             {
-                new Bag {BagName = "Bag1", Price = 20.00, Description ="Good bag1", ImagePath="", CategoryID = 1, SupplierID = 1},
-                new Bag {BagName = "Bag2", Price = 20.00, Description ="Good bag1", ImagePath="", CategoryID = 1, SupplierID = 1},
-                new Bag {BagName = "Bag3", Price = 20.00, Description ="Good bag1", ImagePath="", CategoryID = 2, SupplierID = 2},
-                new Bag {BagName = "Bag4", Price = 20.00, Description ="Good bag1", ImagePath="", CategoryID = 2, SupplierID = 2},
-                new Bag {BagName = "Bag5", Price = 20.00, Description ="Good bag1", ImagePath="", CategoryID = 3, SupplierID = 3},
+                //new Bag {BagName = "Bag1", Price = 20.00, Description ="Good bag1", ImagePath="", CategoryID = 1, SupplierID = 1},
+                //new Bag {BagName = "Bag2", Price = 20.00, Description ="Good bag1", ImagePath="", CategoryID = 1, SupplierID = 1},
+                //new Bag {BagName = "Bag3", Price = 20.00, Description ="Good bag1", ImagePath="", CategoryID = 2, SupplierID = 2},
+                //new Bag {BagName = "Bag4", Price = 20.00, Description ="Good bag1", ImagePath="", CategoryID = 2, SupplierID = 2},
+                //new Bag {BagName = "Bag5", Price = 20.00, Description ="Good bag1", ImagePath="", CategoryID = 3, SupplierID = 3},
             };
             foreach(var b in bags)
             {

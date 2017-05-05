@@ -14,19 +14,43 @@ namespace QualityBags.Models
 
     public class Order
     {
-        public int OrderID { get; set; }
-        public int CustomerID {get;set;}
-        public float SubTotal { get; set; }
-        public float TotalCost { get; set; }
+        private const decimal gst = 0.15M;
 
-        [DataType(DataType.Date)] //Week 4
+        public int OrderID { get; set; }
+        public int CustomerID { get; set; }
+        public decimal SubTotal { get; set; }
+        public decimal GST  {
+            get { return gst; }
+        }
+        public decimal TotalCost { get; set; }
+
+        [DataType(DataType.Date), Display(Name ="Order Date")] //Week 4
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
         public DateTime Date { get; set;}
+
+        [Required, Display(Name = "Receiver's Name")]
+        public string Receiver { get; set; }
+        [Required]
+        public string Street{ get; set; }
+        [Required]
+        public string City { get; set; }
+        [Required]
+        public string PostalCode { get; set; }
+        [Required]
+        public string Country { get; set; }
+        [Required, DataType(DataType.PhoneNumber)]
+        public string Contact { get; set; }
+
         public OrderStatus Status { get; set; }
 
         //Navigation property
         public ICollection<OrderItem> OrderItems { get; set; }
-        public ApplicationUser User { get; set; }
+        public ApplicationUser Customer { get; set; }
+
+        public string GetAddress()
+        {
+            return Street + ", " + City + " " + PostalCode + ", " + Country;
+        }
 
     }
 }

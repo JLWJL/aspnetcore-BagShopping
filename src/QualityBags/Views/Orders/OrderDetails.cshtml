@@ -1,0 +1,124 @@
+@model QualityBags.Models.Order
+
+@{
+    ViewData["Title"] = "Order Details";
+}
+
+<h2 class="glyphicon glyphicon-saved">Thanks for your purchase with Quality Bags</h2>
+
+<div>
+
+    <h4>The following order will be dispatched as per the details below.</h4>
+
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>@Html.DisplayNameFor(model => model.Receiver)</dt>
+        <dd>@Html.DisplayFor(model => model.Receiver)</dd>
+        
+        <dt>@Html.DisplayNameFor(model => model.Customer.Email)</dt>
+        <dd>@Html.DisplayFor(model => model.Customer.Email)</dd>
+        
+        <dt>
+            @Html.DisplayNameFor(model => model.Contact)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Contact)
+        </dd>
+       
+        <dt>Address</dt>
+        <dd>@Html.DisplayFor(model => model.GetAddress())</dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Date)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Date)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.TotalCost)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.TotalCost)
+        </dd>
+
+        @*<dt>
+            @Html.DisplayNameFor(model => model.City)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.City)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Country)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Country)
+        </dd>*@
+        <dd>
+            <table class="table">
+                <tr>
+                    <th>Item Number </th>
+                    <th>Bag Name</th>
+                    <th>Quantity</th>
+                    <th>Price</th>
+                </tr>
+                @foreach (var item in Model.OrderItems)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Bag.BagID)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Bag.BagName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Quantity)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Bag.Price)
+                        </td>
+                    </tr>
+                }
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td>
+                        <label>Subtotal:</label>
+                    </td>
+                    <td>
+                        <label>@Model.TotalCost*(1-@Model.GST)</label>
+                    </td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td>
+                        <label>GST:</label>
+                    </td>
+                    <td>
+                        <label>@Model.TotalCost*@Model.GST</label>
+                    </td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td>
+                        <label>Total:</label>
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => Model.TotalCost)
+                    </td>
+                </tr>
+            </table>
+        </dd>
+
+    </dl>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

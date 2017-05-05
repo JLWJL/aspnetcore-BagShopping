@@ -23,5 +23,7 @@ namespace QualityBags.Models
         public string PhoneWork { get; set; }
 
         public string Address { get; set; }
+
+        public ICollection<Order> Orders { get; set;}
     }
 }

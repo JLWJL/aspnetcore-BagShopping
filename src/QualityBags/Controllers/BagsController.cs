@@ -28,6 +28,7 @@ namespace QualityBags.Controllers
         }
 
         // GET: Bags
+        [AllowAnonymous]
         public async Task<IActionResult> Index()
         {   
             var shoppingContext = _context.Bags.Include(b => b.Category).Include(b => b.Supplier);
