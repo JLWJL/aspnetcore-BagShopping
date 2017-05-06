@@ -19,7 +19,7 @@ namespace QualityBags.Models
         public int OrderID { get; set; }
 
         [Required]
-        public int CustomerID { get; set; }
+        public string CustomerID{ get; set; }
         public decimal SubTotal { get; set; }
         public decimal GST  {
             get { return gst; }

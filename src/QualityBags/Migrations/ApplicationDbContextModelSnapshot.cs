@@ -259,9 +259,8 @@ namespace QualityBags.Migrations
                     b.Property<string>("Country")
                         .IsRequired();
 
-                    b.Property<int>("CustomerID");
-
-                    b.Property<string>("CustomerId");
+                    b.Property<string>("CustomerID")
+                        .IsRequired();
 
                     b.Property<DateTime>("Date");
 
@@ -282,7 +281,7 @@ namespace QualityBags.Migrations
 
                     b.HasKey("OrderID");
 
-                    b.HasIndex("CustomerId");
+                    b.HasIndex("CustomerID");
 
                     b.ToTable("Order");
                 });
@@ -406,7 +405,8 @@ namespace QualityBags.Migrations
                 {
                     b.HasOne("QualityBags.Models.ApplicationUser", "Customer")
                         .WithMany("Orders")
-                        .HasForeignKey("CustomerId");
+                        .HasForeignKey("CustomerID")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("QualityBags.Models.OrderItem", b =>

@@ -8,7 +8,7 @@ using QualityBags.Data;
 namespace QualityBags.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20170506021218_Update-Order-Model")]
+    [Migration("20170506024614_Update-OrderModel")]
     partial class UpdateOrderModel
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -260,9 +260,8 @@ namespace QualityBags.Migrations
                     b.Property<string>("Country")
                         .IsRequired();
 
-                    b.Property<int>("CustomerID");
-
-                    b.Property<string>("CustomerId");
+                    b.Property<string>("CustomerID")
+                        .IsRequired();
 
                     b.Property<DateTime>("Date");
 
@@ -283,7 +282,7 @@ namespace QualityBags.Migrations
 
                     b.HasKey("OrderID");
 
-                    b.HasIndex("CustomerId");
+                    b.HasIndex("CustomerID");
 
                     b.ToTable("Order");
                 });
@@ -407,7 +406,8 @@ namespace QualityBags.Migrations
                 {
                     b.HasOne("QualityBags.Models.ApplicationUser", "Customer")
                         .WithMany("Orders")
-                        .HasForeignKey("CustomerId");
+                        .HasForeignKey("CustomerID")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("QualityBags.Models.OrderItem", b =>

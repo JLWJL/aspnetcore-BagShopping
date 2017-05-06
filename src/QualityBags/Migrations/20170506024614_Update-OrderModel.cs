@@ -38,12 +38,6 @@ namespace QualityBags.Migrations
                 nullable: false,
                 defaultValue: "");
 
-            migrationBuilder.AddColumn<int>(
-                name: "CustomerID",
-                table: "Order",
-                nullable: false,
-                defaultValue: 0);
-
             migrationBuilder.AddColumn<string>(
                 name: "PostalCode",
                 table: "Order",
@@ -78,7 +72,7 @@ namespace QualityBags.Migrations
                 nullable: false);
 
             migrationBuilder.CreateIndex(
-                name: "IX_Order_CustomerId",
+                name: "IX_Order_CustomerID",
                 table: "Order",
                 column: "CustomerID");
 
@@ -93,27 +87,22 @@ namespace QualityBags.Migrations
                 nullable: false);
 
             migrationBuilder.AddForeignKey(
-                name: "FK_Order_AspNetUsers_CustomerId",
+                name: "FK_Order_AspNetUsers_CustomerID",
                 table: "Order",
                 column: "CustomerID",
                 principalTable: "AspNetUsers",
                 principalColumn: "Id",
-                onDelete: ReferentialAction.Restrict);
-
-            migrationBuilder.RenameColumn(
-                name: "CustomerID",
-                table: "Order",
-                newName: "CustomerId");
+                onDelete: ReferentialAction.Cascade);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropForeignKey(
-                name: "FK_Order_AspNetUsers_CustomerId",
+                name: "FK_Order_AspNetUsers_CustomerID",
                 table: "Order");
 
             migrationBuilder.DropIndex(
-                name: "IX_Order_CustomerId",
+                name: "IX_Order_CustomerID",
                 table: "Order");
 
             migrationBuilder.DropColumn(
@@ -129,10 +118,6 @@ namespace QualityBags.Migrations
                 table: "Order");
 
             migrationBuilder.DropColumn(
-                name: "CustomerID",
-                table: "Order");
-
-            migrationBuilder.DropColumn(
                 name: "PostalCode",
                 table: "Order");
 
@@ -144,10 +129,10 @@ namespace QualityBags.Migrations
                 name: "Street",
                 table: "Order");
 
-            //migrationBuilder.AddColumn<string>(
-            //    name: "UserId",
-            //    table: "Order",
-            //    nullable: true);
+            migrationBuilder.AddColumn<string>(
+                name: "UserId",
+                table: "Order",
+                nullable: true);
 
             migrationBuilder.AlterColumn<float>(
                 name: "TotalCost",
@@ -160,14 +145,14 @@ namespace QualityBags.Migrations
                 nullable: false);
 
             migrationBuilder.AlterColumn<int>(
-                name: "CustomerId",
+                name: "CustomerID",
                 table: "Order",
                 nullable: false);
 
-            //migrationBuilder.CreateIndex(
-            //    name: "IX_Order_UserId",
-            //    table: "Order",
-            //    column: "UserId");
+            migrationBuilder.CreateIndex(
+                name: "IX_Order_UserId",
+                table: "Order",
+                column: "UserId");
 
             migrationBuilder.AlterColumn<int>(
                 name: "CartID",
@@ -179,18 +164,13 @@ namespace QualityBags.Migrations
                 table: "Bag",
                 nullable: false);
 
-            //migrationBuilder.AddForeignKey(
-            //    name: "FK_Order_AspNetUsers_UserId",
-            //    table: "Order",
-            //    column: "UserId",
-            //    principalTable: "AspNetUsers",
-            //    principalColumn: "Id",
-            //    onDelete: ReferentialAction.Restrict);
-
-            migrationBuilder.RenameColumn(
-                name: "CustomerId",
+            migrationBuilder.AddForeignKey(
+                name: "FK_Order_AspNetUsers_UserId",
                 table: "Order",
-                newName: "CustomerID");
+                column: "UserId",
+                principalTable: "AspNetUsers",
+                principalColumn: "Id",
+                onDelete: ReferentialAction.Restrict);
         }
     }
 }

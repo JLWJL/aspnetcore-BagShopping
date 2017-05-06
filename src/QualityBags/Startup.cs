@@ -62,6 +62,12 @@ namespace QualityBags
             // Add application services.
             services.AddTransient<IEmailSender, AuthMessageSender>();
             services.AddTransient<ISmsSender, AuthMessageSender>();
+
+            services.AddSession(options =>
+            {
+                options.IdleTimeout = TimeSpan.FromMinutes(20);
+                options.CookieHttpOnly = true;
+            });
         }
 
        
@@ -72,6 +78,8 @@ namespace QualityBags
                         ILoggerFactory loggerFactory, ApplicationDbContext context,
                         UserManager<ApplicationUser> userManager, IServiceProvider serviceProvider)
         {
+            app.UseSession();
+
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
 
