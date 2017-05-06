@@ -16,17 +16,78 @@ namespace QualityBags.Controllers
 
         public ShoppingCartsController(ApplicationDbContext context)
         {
-            _context = context;    
+            _context = context;
         }
 
-        // GET: ShoppingCarts
-        public async Task<IActionResult> Index()
+        /// <summary>
+        /// Get the shopping cart from Http context
+        /// </summary>
+        /// <returns></returns>
+        public IActionResult Index()
         {
-            return View(await _context.ShoppingCart.ToListAsync());
+            ShoppingCart currentCart = ShoppingCart.GetCart(this.HttpContext);
+            return View(currentCart);
         }
+
+        /// <summary>
+        /// Add item to shopping cart
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public async Task<IActionResult> AddToCart(int id, string returnurl = null)
+        {
+            //ViewBag.PreURL = Request.Headers["Referer"];
+            var bagToAdd = await _context.Bags.SingleOrDefaultAsync(b => b.BagID == id);
+            if (bagToAdd != null)
+            {
+                var cart = ShoppingCart.GetCart(this.HttpContext);
+                cart.AddToCart(bagToAdd, _context);
+                return Redirect(Request.Headers["Referer"].ToString()); //Stay at the same page after adding to cart
+            }else
+            {
+                return NotFound();
+            }
+        }
+
+        /// <summary>
+        /// Remove or decrease the quantity of an item in shopping cart
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public async Task<IActionResult> RemoveFromCart(int id)
+        {
+            var bagToRemove = await _context.Bags.SingleOrDefaultAsync(b => b.BagID == id);
+            if (bagToRemove != null)
+            {
+                var cart = ShoppingCart.GetCart(this.HttpContext);
+                int itemCount = await cart.RemoveFromCart(id, _context);
+                return Redirect(Request.Headers["Referer"].ToString()); //Stay at the same page after adding to cart
+            }
+            else
+            {
+                return NotFound();
+            }
+        }
+
+        /// <summary>
+        /// Empty the shopping cart
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        /// 
+        public async Task<IActionResult> EmptyCart()
+        {
+            var cart = ShoppingCart.GetCart(this.HttpContext);
+            cart.EmtypCart(_context);
+            return Redirect(Request.Headers["Referer"].ToString()); //Stay at the same page after adding to cart
+        }
+
+
+
+
 
         // GET: ShoppingCarts/Details/5
-        public async Task<IActionResult> Details(string? id)
+        public async Task<IActionResult> Details(string id)
         {
             if (id == null)
             {
@@ -65,7 +126,7 @@ namespace QualityBags.Controllers
         }
 
         // GET: ShoppingCarts/Edit/5
-        public async Task<IActionResult> Edit(string? id)
+        public async Task<IActionResult> Edit(string id)
         {
             if (id == null)
             {
@@ -116,7 +177,7 @@ namespace QualityBags.Controllers
         }
 
         // GET: ShoppingCarts/Delete/5
-        public async Task<IActionResult> Delete(string? id)
+        public async Task<IActionResult> Delete(string id)
         {
             if (id == null)
             {

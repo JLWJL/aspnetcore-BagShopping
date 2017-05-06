@@ -17,6 +17,8 @@ namespace QualityBags.Models
         private const decimal gst = 0.15M;
 
         public int OrderID { get; set; }
+
+        [Required]
         public int CustomerID { get; set; }
         public decimal SubTotal { get; set; }
         public decimal GST  {

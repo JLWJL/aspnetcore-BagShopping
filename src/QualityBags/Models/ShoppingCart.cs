@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿    using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -79,7 +79,7 @@ namespace QualityBags.Models
             var cartItems = dbCntxt.CartItems.Where(c => c.CartID == ShoppingCartID);
             if(cartItems == null)
             {
-
+                //Do nothing
             }
             foreach(var item in cartItems)
             {
