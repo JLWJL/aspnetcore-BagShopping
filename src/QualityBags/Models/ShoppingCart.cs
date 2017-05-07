@@ -10,6 +10,7 @@ namespace QualityBags.Models
 {
     public class ShoppingCart
     {
+        
         public string ShoppingCartID { get; set; }
         public const string CartSessionKey = "CartID";
 
@@ -25,9 +26,9 @@ namespace QualityBags.Models
         /// </summary>
         /// <param name="context"></param>
         /// <returns></returns>
-        public async void AddToCart(Bag bag, ApplicationDbContext dbCntxt)
+        public void AddToCart(Bag bag, ApplicationDbContext dbCntxt)
         {
-            var cartItem = await dbCntxt.CartItems.SingleOrDefaultAsync(i => i.CartID == ShoppingCartID && i.Bag.BagID ==bag.BagID );
+            var cartItem = dbCntxt.CartItems.SingleOrDefault(i => i.CartID == ShoppingCartID && i.Bag.BagID ==bag.BagID );
             if(cartItem == null)
             {
                 cartItem = new CartItem
@@ -35,7 +36,7 @@ namespace QualityBags.Models
                     CartID = ShoppingCartID,
                     Bag = bag,
                     Count = 1,
-                    DateCreated = DateTime.Now.Date
+                    DateCreated = DateTime.Now
                 };
                 dbCntxt.CartItems.Add(cartItem);
             }
@@ -43,8 +44,8 @@ namespace QualityBags.Models
             {
                 cartItem.Count++;
             }
-
-            await dbCntxt.SaveChangesAsync();
+            dbCntxt.SaveChanges();
+            
         }
 
         /// <summary>
@@ -52,18 +53,22 @@ namespace QualityBags.Models
         /// </summary>
         /// <param name="context"></param>
         /// <returns></returns>
-        public async Task<int> RemoveFromCart(int id, ApplicationDbContext dbCntxt)
+        public int RemoveFromCart(int id, ApplicationDbContext dbCntxt)
         {
-            var cartItem = await dbCntxt.CartItems.SingleOrDefaultAsync(c => c.Bag.BagID == id && c.CartID == ShoppingCartID);
+            var cartItem = dbCntxt.CartItems.SingleOrDefault(c => c.Bag.BagID == id && c.CartID == ShoppingCartID);
             int itemCount = 0;
             if (cartItem != null)
             {
-                cartItem.Count--;
-                itemCount = cartItem.Count;
-            }
-            else
-            {
-                dbCntxt.CartItems.Remove(cartItem);
+                if (cartItem.Count > 1)
+                {
+                    cartItem.Count--;
+                    itemCount = cartItem.Count;
+                }
+                else
+                {
+                    dbCntxt.CartItems.Remove(cartItem);
+                }
+                dbCntxt.SaveChanges();                
             }
             return itemCount;
         }
@@ -74,19 +79,19 @@ namespace QualityBags.Models
         /// <param name="context"></param>
         /// <returns></returns>
         /// 
-        public async void EmtypCart(ApplicationDbContext dbCntxt)
+        public void EmtypCart(ApplicationDbContext dbCntxt)
         {
             var cartItems = dbCntxt.CartItems.Where(c => c.CartID == ShoppingCartID);
-            if(cartItems == null)
-            {
-                //Do nothing
-            }
+            //if(cartItems == null)
+            //{
+            //    //Do nothing
+            //}
             foreach(var item in cartItems)
             {
                 dbCntxt.CartItems.Remove(item);
             }
 
-            await dbCntxt.SaveChangesAsync();
+            dbCntxt.SaveChanges();
         }
 
         /// <summary>
@@ -94,9 +99,9 @@ namespace QualityBags.Models
         /// </summary>
         /// <param name="context"></param>
         /// <returns></returns>
-        public ICollection<CartItem> GetCartItems(ApplicationDbContext dbCntxt)
+        public List<CartItem> GetCartItems(ApplicationDbContext dbCntxt)
         {
-            ICollection<CartItem> cartItems = dbCntxt.CartItems.Where(i => i.CartID == ShoppingCartID).Include(i => i.Bag).ToList();
+            List<CartItem> cartItems = dbCntxt.CartItems.Include(i => i.Bag).Where(i => i.CartID == ShoppingCartID).ToList();
             return cartItems;
         }
 
@@ -105,10 +110,10 @@ namespace QualityBags.Models
         /// </summary>
         /// <param name="context"></param>
         /// <returns></returns>
-        public int? GetCartItemsCount(ApplicationDbContext dbCntxt)
+        public int GetCartItemsCount(ApplicationDbContext dbCntxt)
         {
-            int? number = (from cartItems in dbCntxt.CartItems where cartItems.CartID == ShoppingCartID select cartItems.Count).Sum();
-            return number;
+            int? number = (from cartItems in dbCntxt.CartItems where cartItems.CartID == ShoppingCartID select (int?)cartItems.Count).Sum();
+            return number ?? 0;
         }
 
         /// <summary>
@@ -118,7 +123,7 @@ namespace QualityBags.Models
         /// <returns></returns>
         public decimal GetCartTotal(ApplicationDbContext dbCntxt)
         {
-            decimal? totalPrice = (from cartItems in dbCntxt.CartItems where cartItems.CartID == ShoppingCartID select cartItems.Count * cartItems.Bag.Price).Sum();
+            decimal? totalPrice = (from cartItems in dbCntxt.CartItems where cartItems.CartID == ShoppingCartID select (int?)cartItems.Count * cartItems.Bag.Price).Sum();
             return totalPrice ?? Decimal.Zero;
         }
 
@@ -129,7 +134,6 @@ namespace QualityBags.Models
             {
                 Guid cartId = new Guid();
                 context.Session.SetString(CartSessionKey, cartId.ToString());
-                return context.Session.GetString(CartSessionKey).ToString();
             }
 
             return context.Session.GetString(CartSessionKey).ToString();

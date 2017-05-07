@@ -12,6 +12,7 @@ namespace QualityBags.Controllers
 {
     public class ShoppingCartsController : Controller
     {
+        //private readonly ApplicationDbContext _context;   /////  ??
         private readonly ApplicationDbContext _context;
 
         public ShoppingCartsController(ApplicationDbContext context)
@@ -34,33 +35,48 @@ namespace QualityBags.Controllers
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public async Task<IActionResult> AddToCart(int id, string returnurl = null)
+        public ActionResult AddToCart(int id, string returnurl = null)
         {
             //ViewBag.PreURL = Request.Headers["Referer"];
-            var bagToAdd = await _context.Bags.SingleOrDefaultAsync(b => b.BagID == id);
+            var bagToAdd = _context.Bags.Single(b => b.BagID == id);
             if (bagToAdd != null)
             {
                 var cart = ShoppingCart.GetCart(this.HttpContext);
                 cart.AddToCart(bagToAdd, _context);
-                return Redirect(Request.Headers["Referer"].ToString()); //Stay at the same page after adding to cart
-            }else
+                return RedirectToAction("Index", "CustomerBags");
+                //return Redirect(Request.Headers["Referer"].ToString()); //Stay at the same page after adding to cart
+            }
+            else
             {
                 return NotFound();
             }
         }
+
+        //public ActionResult AddToCart(int id)
+        //{
+        //    // Retrieve the album from the database
+        //    var addedTutorial = _context.Bags
+        //        .Single(b => b.BagID == id);
+        //    // Add it to the shopping cart
+        //    var cart = ShoppingCart.GetCart(this.HttpContext);
+        //    cart.AddToCart(addedTutorial, _context);
+        //    // Go back to the main store page for more shopping
+        //    return RedirectToAction("Index", "ShoppingCarts");
+        //}
+
 
         /// <summary>
         /// Remove or decrease the quantity of an item in shopping cart
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public async Task<IActionResult> RemoveFromCart(int id)
+        public ActionResult RemoveFromCart(int id)
         {
-            var bagToRemove = await _context.Bags.SingleOrDefaultAsync(b => b.BagID == id);
+            var bagToRemove = _context.Bags.Single(b => b.BagID == id);
             if (bagToRemove != null)
             {
                 var cart = ShoppingCart.GetCart(this.HttpContext);
-                int itemCount = await cart.RemoveFromCart(id, _context);
+                int itemCount = cart.RemoveFromCart(id, _context);
                 return Redirect(Request.Headers["Referer"].ToString()); //Stay at the same page after adding to cart
             }
             else
@@ -75,15 +91,12 @@ namespace QualityBags.Controllers
         /// <param name="id"></param>
         /// <returns></returns>
         /// 
-        public async Task<IActionResult> EmptyCart()
+        public IActionResult EmptyCart()
         {
             var cart = ShoppingCart.GetCart(this.HttpContext);
             cart.EmtypCart(_context);
             return Redirect(Request.Headers["Referer"].ToString()); //Stay at the same page after adding to cart
         }
-
-
-
 
 
         // GET: ShoppingCarts/Details/5

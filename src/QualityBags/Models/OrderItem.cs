@@ -10,6 +10,7 @@ namespace QualityBags.Models
     public class OrderItem
     {
         public int OrderItemID { get; set; }
+        [DisplayFormat(DataFormatString = "{0:C}")]
         public decimal UnitPrice { get; set; }
         public int Quantity { get; set; }
 

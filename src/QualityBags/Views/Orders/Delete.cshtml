@@ -1,10 +1,8 @@
 @model QualityBags.Models.Order
 
 @{
-    ViewData["Title"] = "Delete";
+    ViewData["Title"] = "Delete Order";
 }
-
-<h2>Delete</h2>
 
 <h3>Are you sure you want to delete this?</h3>
 <div>
@@ -12,35 +10,19 @@
     <hr />
     <dl class="dl-horizontal">
         <dt>
-            @Html.DisplayNameFor(model => model.City)
+            @Html.DisplayNameFor(model => model.OrderID)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.City)
+            @Html.DisplayFor(model => model.OrderID)
         </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Country)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Country)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.CustomerID)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.CustomerID)
-        </dd>
+
         <dt>
             @Html.DisplayNameFor(model => model.Date)
         </dt>
         <dd>
             @Html.DisplayFor(model => model.Date)
         </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.PostalCode)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.PostalCode)
-        </dd>
+
         <dt>
             @Html.DisplayNameFor(model => model.Receiver)
         </dt>
@@ -48,17 +30,18 @@
             @Html.DisplayFor(model => model.Receiver)
         </dd>
         <dt>
+            Address
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.GetAddress())
+        </dd>
+        <dt>
             @Html.DisplayNameFor(model => model.Status)
         </dt>
         <dd>
             @Html.DisplayFor(model => model.Status)
         </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Street)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Street)
-        </dd>
+
         <dt>
             @Html.DisplayNameFor(model => model.SubTotal)
         </dt>
@@ -70,6 +53,36 @@
         </dt>
         <dd>
             @Html.DisplayFor(model => model.TotalCost)
+        </dd>
+
+        <dd>
+            <table class="table">
+                <tr>
+                    <th>Bag Number</th>
+                    <th>Bag Name</th>
+                    <th>Quatity</th>
+                    <th>Price</th>
+                </tr>
+                
+                @foreach (var item in Model.OrderItems)
+                {
+                    <tr>
+                        <td>@item.Bag.BagID</td>
+                        <td>@item.Bag.BagName</td>
+                        <td>@item.Quantity</td>
+                        <td>@item.Bag.Price</td>
+                    </tr>
+                }
+
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td>
+                        <label>Total:</label>
+                    </td>
+                    <td>@Model.TotalCost</td>
+                </tr>
+            </table>
         </dd>
     </dl>
     

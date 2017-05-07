@@ -18,12 +18,14 @@ namespace QualityBags.Models
 
         public int OrderID { get; set; }
 
-        [Required]
         public string CustomerID{ get; set; }
+        
+        [DisplayFormat(DataFormatString ="{0:C}")]
         public decimal SubTotal { get; set; }
         public decimal GST  {
             get { return gst; }
         }
+        [DisplayFormat(DataFormatString = "{0:C}")]
         public decimal TotalCost { get; set; }
 
         [DataType(DataType.Date), Display(Name ="Order Date")] //Week 4
@@ -49,9 +51,11 @@ namespace QualityBags.Models
         public ICollection<OrderItem> OrderItems { get; set; }
         public ApplicationUser Customer { get; set; }
 
-        public string GetAddress()
+        public string Address
         {
-            return Street + ", " + City + " " + PostalCode + ", " + Country;
+            get {
+                return Street + ", " + City + " " + PostalCode + ", " + Country;
+            } 
         }
 
     }

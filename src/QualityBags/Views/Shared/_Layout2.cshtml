@@ -9,8 +9,8 @@
         <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
         <link rel="stylesheet" href="~/css/site.css" />
         <link rel="stylesheet" href="~/css/sharedLayout.css" />
-        <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css">
     </environment>
+
     <environment names="Staging,Production">
         <link rel="stylesheet" href="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.6/css/bootstrap.min.css"
               asp-fallback-href="~/lib/bootstrap/dist/css/bootstrap.min.css"
@@ -19,8 +19,9 @@
     </environment>
     @Html.ApplicationInsightsJavaScript(TelemetryConfiguration)
 </head>
+
 <body>
-    <div class="navbar navbar-inverse navbar-fixed-top">
+    <div class="navbar navbar-fixed-top">
         <div class="container">
             <div class="navbar-header">
                 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
@@ -29,7 +30,6 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                
                 <div class="container">
                     <div class="row header-top">
                         <div class="col-lg-6">
@@ -46,9 +46,7 @@
 
                     </div>
                 </div>
-
             </div>
-            
         </div>
 
         <div class="container">
@@ -69,7 +67,7 @@
                                 <li><a asp-controller="Bags" asp-action="Index">Bags</a></li>
                                 <li><a asp-controller="Categories" asp-action="Index">Categories</a></li>
                                 <li><a asp-controller="Suppliers" asp-action="Index">Suppliers</a></li>
-                                <li><a asp-controller="Orders" asp-action="Index">Orders</a></li>
+                                <li><a asp-controller="" asp-action="">Orders</a></li>
                             </ul>
                         </li>
                     }
@@ -77,64 +75,22 @@
             </div>
         </div>
     </div>
+
     <div class="container body-content">
         @RenderBody()
-  
-        <div>
-                @await Component.InvokeAsync("ShoppingCartViewModel")
+
+        <div class="cart-container glyphicon glyphicon-shopping-cart">
+
+            <div class="cart-area">
+            </div>
         </div>
 
-        <!-- footer start -->
-        <footer class="footer">
-            <div class="footer-left">
-                <img src="images/logo_title.png" width="150" alt="" />
-                <p class="footer-links">
-                    <a href="#">Home</a>
-                    ·
-                    <a href="#">Product</a>
-                    ·
-                    <a href="#">Membership</a>
-                    ·
-                    <a href="#">About</a>
-                </p>
-                <p class="footer-copyright">&copy; 2017 - Quality Bags</p>
+        <footer>
+            <div class="container">
+                <content>&copy; 2017 - QualityBags</content>
             </div>
 
-            <div class="footer-center">
-
-                <div>
-                    <i class="fa fa-map-marker"></i>
-                    <p><span>22 Main Street</span>Auckland, New Zealand</p>
-                </div>
-
-                <div>
-                    <i class="fa fa-phone"></i>
-                    <p>0800 14 65 00</p>
-                </div>
-
-                <div>
-                    <i class="fa fa-envelope"></i>
-                    <p><a href="mailto:support@wallstreetwines.co.nz">support@qualitybags.co.nz</a></p>
-                </div>
-
-            </div>
-
-            <div class="footer-right">
-
-                <p class="footer-designer">
-                    <span>Designer</span>
-                    Chong Wang <br /> SID: 1470225
-                </p>
-                <br>
-                <div class="footer-icons">
-                    <a href="#"><i class="fa fa-facebook"></i></a>
-                    <a href="#"><i class="fa fa-twitter"></i></a>
-                    <a href="#"><i class="fa fa-tumblr"></i></a>
-                    <a href="#"><i class="fa fa-youtube"></i></a>
-                    <a href="#"><i class="fa fa-instagram"></i></a>
-                </div>
-            </div>
-        </footer>  <!-- footer end-->
+        </footer>
     </div>
 
     <environment names="Development">

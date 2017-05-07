@@ -84,7 +84,7 @@ namespace QualityBags.Controllers
 
                 await _context.SaveChangesAsync();
 
-                return RedirectToAction("Purchased", new RouteValueDictionary(
+                return RedirectToAction("OrderDetails", new RouteValueDictionary(
                     new { id = order.OrderID }));
             }
             return View(order);
@@ -224,6 +224,7 @@ namespace QualityBags.Controllers
         private OrderItem CreateOneOrderItem(CartItem cartItem)
         {
             OrderItem orderItem = new OrderItem();
+            orderItem.Bag = cartItem.Bag;
             orderItem.UnitPrice = cartItem.Bag.Price;
             orderItem.Quantity = cartItem.Count;
             return orderItem;
