@@ -48,7 +48,7 @@ namespace QualityBags.Models
         public OrderStatus Status { get; set; }
 
         //Navigation property
-        public ICollection<OrderItem> OrderItems { get; set; }
+        public List<OrderItem> OrderItems { get; set; }
         public ApplicationUser Customer { get; set; }
 
         public string Address

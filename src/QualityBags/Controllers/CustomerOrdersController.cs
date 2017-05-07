@@ -30,7 +30,7 @@ namespace QualityBags.Controllers
         /// Return all orders of current user
         /// </summary>
         /// <returns></returns>
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
             var user = _userManager.GetUserAsync(User).Result;
             var userOrders = (from orders in _context.Orders where orders.Customer == user orderby orders.Date select orders).ToList();
@@ -75,15 +75,15 @@ namespace QualityBags.Controllers
                 }
 
                 order.Customer = currentUser;
+                order.CustomerID = currentUser.Id;
                 order.TotalCost = ShoppingCart.GetCart(this.HttpContext).GetCartTotal(_context);
                 order.SubTotal = order.TotalCost * (1 - order.GST);
                 order.Date = DateTime.Today;
                 order.Status = OrderStatus.Waiting;
-                order.OrderItems = orderItems;
+                order.OrderItems = orderItems; //Cannot assign, later on 'order.OderItems = null'
                 _context.Add(order);
 
-                await _context.SaveChangesAsync();
-
+                _context.SaveChanges();
                 return RedirectToAction("OrderDetails", new RouteValueDictionary(
                     new { id = order.OrderID }));
             }
@@ -102,9 +102,13 @@ namespace QualityBags.Controllers
                 return NotFound();
             }
 
-            Order order = await _context.Orders.AsNoTracking().SingleOrDefaultAsync(o => o.OrderID == id);
+            Order order = await _context.Orders.Include(o=>o.Customer).AsNoTracking().SingleOrDefaultAsync(o => o.OrderID == id);
             if (order != null)
             {
+                //Added 8 May
+                var orderItems = _context.OrderItem.Where(oi => oi.Order.OrderID == order.OrderID).Include(oi => oi.Bag).ToList();
+                order.OrderItems = orderItems;
+
                 ShoppingCart.GetCart(this.HttpContext).EmtypCart(_context);
                 return View(order);
             }
