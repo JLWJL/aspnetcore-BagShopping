@@ -1,0 +1,82 @@
+@model QualityBags.Models.Order
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+
+@{
+    ViewData["Title"] = "Check out";
+    var user = UserManager.GetUserAsync(User).Result;
+}
+
+<h2>Please provide information for delivery</h2>
+
+<form asp-action="Create" asp-controller="CustomerOrders" method="post">
+    <div class="form-horizontal">
+
+        <hr />
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="form-group">
+            <label asp-for="Receiver" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="Receiver" value="@user.FirstName" class="form-control" />
+                <span asp-validation-for="Receiver" class="text-danger" />
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Contact" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="Contact" value =""class="form-control" />
+                <span asp-validation-for="Contact" class="text-danger" />
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Street" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="Street" class="form-control" />
+                <span asp-validation-for="Street" class="text-danger" />
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="City" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="City" class="form-control" />
+                <span asp-validation-for="City" class="text-danger" />
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="PostalCode" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="PostalCode" class="form-control" />
+                <span asp-validation-for="PostalCode" class="text-danger" />
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Country" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="Country" class="form-control" />
+                <span asp-validation-for="Country" class="text-danger" />
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <button type="submit" class="btn btn-default btn-lg">
+                    Place Order<span class="glyphicon glyphicon-fast-forward"></span>
+                </button>
+                
+            </div>
+        </div>
+    </div>
+</form>
+
+<div>
+    <a asp-action="Index">Cancel</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

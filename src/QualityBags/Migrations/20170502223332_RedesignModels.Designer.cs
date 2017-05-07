@@ -1,22 +1,20 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
+using QualityBags.Data;
 
-namespace QualityBags.Data.Migrations
+namespace QualityBags.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("00000000000000_CreateIdentitySchema")]
-    partial class CreateIdentitySchema
+    [Migration("20170502223332_RedesignModels")]
+    partial class RedesignModels
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
-                .HasAnnotation("ProductVersion", "1.0.0-rc3")
+                .HasAnnotation("ProductVersion", "1.0.1")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.EntityFrameworkCore.IdentityRole", b =>
@@ -132,6 +130,8 @@ namespace QualityBags.Data.Migrations
 
                     b.Property<int>("AccessFailedCount");
 
+                    b.Property<string>("Address");
+
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken();
 
@@ -139,6 +139,12 @@ namespace QualityBags.Data.Migrations
                         .HasAnnotation("MaxLength", 256);
 
                     b.Property<bool>("EmailConfirmed");
+
+                    b.Property<bool>("Enabled");
+
+                    b.Property<string>("FirstName");
+
+                    b.Property<string>("LastName");
 
                     b.Property<bool>("LockoutEnabled");
 
@@ -152,9 +158,15 @@ namespace QualityBags.Data.Migrations
 
                     b.Property<string>("PasswordHash");
 
+                    b.Property<string>("PhoneHome");
+
+                    b.Property<string>("PhoneMobile");
+
                     b.Property<string>("PhoneNumber");
 
                     b.Property<bool>("PhoneNumberConfirmed");
+
+                    b.Property<string>("PhoneWork");
 
                     b.Property<string>("SecurityStamp");
 
@@ -173,6 +185,147 @@ namespace QualityBags.Data.Migrations
                         .HasName("UserNameIndex");
 
                     b.ToTable("AspNetUsers");
+                });
+
+            modelBuilder.Entity("QualityBags.Models.Bag", b =>
+                {
+                    b.Property<int>("BagID")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("BagName")
+                        .IsRequired();
+
+                    b.Property<int>("CategoryID");
+
+                    b.Property<string>("Description");
+
+                    b.Property<string>("ImagePath");
+
+                    b.Property<double>("Price");
+
+                    b.Property<int>("SupplierID");
+
+                    b.HasKey("BagID");
+
+                    b.HasIndex("CategoryID");
+
+                    b.HasIndex("SupplierID");
+
+                    b.ToTable("Bag");
+                });
+
+            modelBuilder.Entity("QualityBags.Models.CartItem", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int?>("BagID");
+
+                    b.Property<int>("CartID");
+
+                    b.Property<int>("Count");
+
+                    b.Property<DateTime>("DateCreated");
+
+                    b.HasKey("ID");
+
+                    b.HasIndex("BagID");
+
+                    b.ToTable("CartItem");
+                });
+
+            modelBuilder.Entity("QualityBags.Models.Category", b =>
+                {
+                    b.Property<int>("CategoryID")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("CategoryName");
+
+                    b.HasKey("CategoryID");
+
+                    b.ToTable("Category");
+                });
+
+            modelBuilder.Entity("QualityBags.Models.Order", b =>
+                {
+                    b.Property<int>("OrderID")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int>("CustomerID");
+
+                    b.Property<DateTime>("Date");
+
+                    b.Property<int>("Status");
+
+                    b.Property<float>("SubTotal");
+
+                    b.Property<float>("TotalCost");
+
+                    b.Property<string>("UserId");
+
+                    b.HasKey("OrderID");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Order");
+                });
+
+            modelBuilder.Entity("QualityBags.Models.OrderItem", b =>
+                {
+                    b.Property<int>("OrderItemID")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int?>("BagID");
+
+                    b.Property<int?>("OrderID");
+
+                    b.Property<int>("Quantity");
+
+                    b.Property<decimal>("UnitPrice");
+
+                    b.HasKey("OrderItemID");
+
+                    b.HasIndex("BagID");
+
+                    b.HasIndex("OrderID");
+
+                    b.ToTable("OrderItem");
+                });
+
+            modelBuilder.Entity("QualityBags.Models.ShoppingCart", b =>
+                {
+                    b.Property<string>("ShoppingCartID");
+
+                    b.HasKey("ShoppingCartID");
+
+                    b.ToTable("ShoppingCart");
+                });
+
+            modelBuilder.Entity("QualityBags.Models.Supplier", b =>
+                {
+                    b.Property<int>("SupplierID")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Email")
+                        .IsRequired();
+
+                    b.Property<string>("FirstName")
+                        .IsRequired();
+
+                    b.Property<string>("LastName")
+                        .IsRequired();
+
+                    b.Property<string>("PhoneHome");
+
+                    b.Property<string>("PhoneMobile")
+                        .IsRequired()
+                        .HasAnnotation("MaxLength", 11);
+
+                    b.Property<string>("PhoneWork");
+
+                    b.HasKey("SupplierID");
+
+                    b.ToTable("Supplier");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.EntityFrameworkCore.IdentityRoleClaim<string>", b =>
@@ -209,6 +362,45 @@ namespace QualityBags.Data.Migrations
                     b.HasOne("QualityBags.Models.ApplicationUser")
                         .WithMany("Roles")
                         .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("QualityBags.Models.Bag", b =>
+                {
+                    b.HasOne("QualityBags.Models.Category", "Category")
+                        .WithMany("Bags")
+                        .HasForeignKey("CategoryID")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("QualityBags.Models.Supplier", "Supplier")
+                        .WithMany("Bags")
+                        .HasForeignKey("SupplierID")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("QualityBags.Models.CartItem", b =>
+                {
+                    b.HasOne("QualityBags.Models.Bag", "Bag")
+                        .WithMany()
+                        .HasForeignKey("BagID");
+                });
+
+            modelBuilder.Entity("QualityBags.Models.Order", b =>
+                {
+                    b.HasOne("QualityBags.Models.ApplicationUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId");
+                });
+
+            modelBuilder.Entity("QualityBags.Models.OrderItem", b =>
+                {
+                    b.HasOne("QualityBags.Models.Bag", "Bag")
+                        .WithMany("OrderItems")
+                        .HasForeignKey("BagID");
+
+                    b.HasOne("QualityBags.Models.Order", "Order")
+                        .WithMany("OrderItems")
+                        .HasForeignKey("OrderID")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
         }

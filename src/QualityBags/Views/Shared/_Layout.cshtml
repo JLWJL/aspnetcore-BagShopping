@@ -8,6 +8,8 @@
     <environment names="Development">
         <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
         <link rel="stylesheet" href="~/css/site.css" />
+        <link rel="stylesheet" href="~/css/sharedLayout.css" />
+        <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css">
     </environment>
     <environment names="Staging,Production">
         <link rel="stylesheet" href="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.6/css/bootstrap.min.css"
@@ -27,24 +29,112 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a asp-area="" asp-controller="Home" asp-action="Index" class="navbar-brand">QualityBags</a>
+                
+                <div class="container">
+                    <div class="row header-top">
+                        <div class="col-lg-6">
+                            <a asp-area="" asp-controller="Home" asp-action="Index" class="navbar-brand"><img src="~/images/QualityBag_logo.png" alt="Quality Bag Logo"></a>
+                        </div>
+                        <div class="col-lg-6 nav-header-rightside">
+                            @await Html.PartialAsync("_LoginPartial")
+                            <a class="shopping-cart">
+                                Cart
+                                <span class="glyphicon glyphicon-shopping-cart"></span>
+                                <span class="cart-count-toggle">0</span>
+                            </a>
+                        </div>
+
+                    </div>
+                </div>
+
             </div>
+            
+        </div>
+
+        <div class="container">
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
-                    <li><a asp-area="" asp-controller="Home" asp-action="About">About</a></li>
-                    <li><a asp-area="" asp-controller="Home" asp-action="Contact">Contact</a></li>
+                    <li><a asp-area="" asp-controller="CustomerBags" asp-action="Index">Bags</a></li>
+                    <li><a asp-area="" asp-controller="Bags" asp-action="Index">WOMEN</a></li>
+                    <li><a asp-area="" asp-controller="Bags" asp-action="Index">CHILDREN</a></li>
+                    <li><a asp-area="" asp-controller="Home" asp-action="About">ABOUT US</a></li>
+                    <li><a asp-area="" asp-controller="Home" asp-action="Contact">CONTACT</a></li>
+                    @if (User.IsInRole("Admin"))
+                    {
+                        <li class="dropdown">
+
+                            <a class="dropdown-toggle" data-toggle="dropdown">Admin<span class="caret"></span></a>
+                            <ul class="dropdown-menu">
+                                <li><a asp-controller="Admin" asp-action="Index">Customers</a></li>
+                                <li><a asp-controller="Bags" asp-action="Index">Bags</a></li>
+                                <li><a asp-controller="Categories" asp-action="Index">Categories</a></li>
+                                <li><a asp-controller="Suppliers" asp-action="Index">Suppliers</a></li>
+                                <li><a asp-controller="Orders" asp-action="Index">Orders</a></li>
+                            </ul>
+                        </li>
+                    }
                 </ul>
-                @await Html.PartialAsync("_LoginPartial")
             </div>
         </div>
     </div>
     <div class="container body-content">
         @RenderBody()
-        <hr />
-        <footer>
-            <p>&copy; 2017 - QualityBags</p>
-        </footer>
+  
+        <div>
+                @await Component.InvokeAsync("ShoppingCartViewModel")
+        </div>
+
+        <!-- footer start -->
+        <footer class="footer">
+            <div class="footer-left">
+                <img src="images/logo_title.png" width="150" alt="" />
+                <p class="footer-links">
+                    <a href="#">Home</a>
+                    ·
+                    <a href="#">Product</a>
+                    ·
+                    <a href="#">Membership</a>
+                    ·
+                    <a href="#">About</a>
+                </p>
+                <p class="footer-copyright">&copy; 2017 - Quality Bags</p>
+            </div>
+
+            <div class="footer-center">
+
+                <div>
+                    <i class="fa fa-map-marker"></i>
+                    <p><span>22 Main Street</span>Auckland, New Zealand</p>
+                </div>
+
+                <div>
+                    <i class="fa fa-phone"></i>
+                    <p>0800 14 65 00</p>
+                </div>
+
+                <div>
+                    <i class="fa fa-envelope"></i>
+                    <p><a href="mailto:support@wallstreetwines.co.nz">support@qualitybags.co.nz</a></p>
+                </div>
+
+            </div>
+
+            <div class="footer-right">
+
+                <p class="footer-designer">
+                    <span>Designer</span>
+                    Chong Wang <br /> SID: 1470225
+                </p>
+                <br>
+                <div class="footer-icons">
+                    <a href="#"><i class="fa fa-facebook"></i></a>
+                    <a href="#"><i class="fa fa-twitter"></i></a>
+                    <a href="#"><i class="fa fa-tumblr"></i></a>
+                    <a href="#"><i class="fa fa-youtube"></i></a>
+                    <a href="#"><i class="fa fa-instagram"></i></a>
+                </div>
+            </div>
+        </footer>  <!-- footer end-->
     </div>
 
     <environment names="Development">

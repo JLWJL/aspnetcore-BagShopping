@@ -5,6 +5,17 @@
 <h2>@ViewData["Title"].</h2>
 <div>
     <p>
-        Thank you for confirming your email. Please <a asp-controller="Account" asp-action="Login">Click here to Log in</a>.
+        @if((bool)ViewData["EmailConfirmed"])
+        {
+            <p>
+                Thank you for confirming your email. Please <a asp-controller="Account" asp-action="Login">Click here to Log in </a>
+            </p>
+        }
+        else
+        {
+            <p>
+                To login,please check your inbox(or spam box) for a confirmation email.
+            </p>
+        }
     </p>
 </div>
