@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using QualityBags.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace QualityBags.Data
 {
@@ -10,7 +11,8 @@ namespace QualityBags.Data
     {
         public static void Initialise(ApplicationDbContext context)
         {
-            context.Database.EnsureCreated();
+            context.Database.EnsureCreated(); 
+            //context.Database.Migrate();  
 
             if (context.Bags.Any())
             {

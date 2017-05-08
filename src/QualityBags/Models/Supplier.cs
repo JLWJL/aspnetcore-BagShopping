@@ -21,7 +21,7 @@ namespace QualityBags.Models
         }
 
         [Required,
-        RegularExpression(@"[0-9]"),
+        RegularExpression(@"[0-9]+", ErrorMessage = "Mobile number only contains digits 0-9"),
          MaxLength(11),
          Display(Name = "Mobile Number")
             ]

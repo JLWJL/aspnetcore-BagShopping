@@ -1,0 +1,39 @@
+html{
+	font-size: 16px;
+}
+
+body{
+	padding-top:60px;
+	font-size:62.5%;
+}
+
+/*Navigation*/
+.navbar{
+	font-size:1.8em;
+	background-color: white;
+}
+
+.navbar .btn{
+	font-size:inherit;
+}
+
+.img-log{
+	height:50px;
+}
+
+.navbar-brand{
+	height:80px;
+}
+
+.navbar-nav li a{
+	padding-top: 30px;
+	color:#ff7c26!important;
+}
+
+.navbar-nav li a:hover{
+	color:black;
+}
+
+.navbar-nav .navbar-link{
+	color:#ff7c26!important;
+}

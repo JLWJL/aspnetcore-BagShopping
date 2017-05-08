@@ -22,7 +22,7 @@
     @foreach (var item in Model.CartItems)
     {
         <div class="row">
-            <div class="col-sm-2"><a asp-action="Details" asp-controller="CustomerBags" asp-route-id="@item.Bag.BagID">@item.Bag.BagID</a> </div>
+            <div class="col-sm-2"><a asp-action="Details" asp-controller="CustomerBags" asp-route-id="@item.Bag.BagID">@item.Bag.BagName</a> </div>
 
             <div class="col-sm-2"><a asp-action="Details" asp-route-id="@item.Bag.BagID">@item.Bag.BagName</a> </div>
 
@@ -32,29 +32,31 @@
         </div>
     }
 
-    <div class="row">
-        <div class="col-sm-2"></div>
-        <div class="col-sm-2">Subtotal:</div>
 
-        <div class="col-sm-2">$@subtotal </div>
-    </div>
-
-    <div class="row">
-        <div class="col-sm-2"></div>
-        <div class="col-sm-2">GST:</div>
-
-        <div class="col-sm-2">$@gst </div>
-    </div>
-
-    <div class="row">
-        <div class="col-sm-2"></div>
-        <div class="col-sm-2">Grand Total:</div>
-
-        <div class="col-sm-2">$@Model.CartTotal</div>
-    </div>
 
     @if (@Model.CartItems.Count > 0)
     {
+        <div class="row">
+            <div class="col-sm-2"></div>
+            <div class="col-sm-2">Subtotal:</div>
+
+            <div class="col-sm-2">$@subtotal </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-2"></div>
+            <div class="col-sm-2">GST:</div>
+
+            <div class="col-sm-2">$@gst </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-2"></div>
+            <div class="col-sm-2">Grand Total:</div>
+
+            <div class="col-sm-2">$@Model.CartTotal</div>
+        </div>
+
         <div class="row">
             <div class="col-sm-offset-4">
                 <a asp-action="Create" asp-controller="CustomerOrders">

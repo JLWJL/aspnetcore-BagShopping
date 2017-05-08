@@ -111,7 +111,7 @@ namespace QualityBags
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
 
-            DbInitialiser.Initialise(context);
+            //DbInitialiser.Initialise(context);
             await CreateRoles(serviceProvider);
 
             /*Assign other users to 'Customer' category*/

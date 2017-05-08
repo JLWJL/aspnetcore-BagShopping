@@ -31,6 +31,8 @@ namespace QualityBags.Data
             modelBuilder.Entity<Bag>().ToTable("Bag");
             modelBuilder.Entity<Supplier>().ToTable("Supplier");
             modelBuilder.Entity<Category>().ToTable("Category");
+            //modelBuilder.Entity<Category>().HasMany(c => c.Bags).WithOne("Category").OnDelete(DeleteBehavior.SetNull);
+
             modelBuilder.Entity<CartItem>().ToTable("CartItem");
             modelBuilder.Entity<Order>().ToTable("Order");
             modelBuilder.Entity<OrderItem>().ToTable("OrderItem");

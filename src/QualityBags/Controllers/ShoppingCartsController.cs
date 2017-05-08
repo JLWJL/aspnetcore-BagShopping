@@ -43,8 +43,8 @@ namespace QualityBags.Controllers
             {
                 var cart = ShoppingCart.GetCart(this.HttpContext);
                 cart.AddToCart(bagToAdd, _context);
-                return RedirectToAction("Index", "CustomerBags");
-                //return Redirect(Request.Headers["Referer"].ToString()); //Stay at the same page after adding to cart
+                //return RedirectToAction("Index", "CustomerBags");
+                return Redirect(Request.Headers["Referer"].ToString()); //Stay at the same page after adding to cart
             }
             else
             {
