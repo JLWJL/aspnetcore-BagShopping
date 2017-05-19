@@ -20,7 +20,11 @@ namespace QualityBags.ViewComponents
 
         public IViewComponentResult Invoke()
         {
+            //Returns a result which will render the partial view with name "Default"
             return View(GetShoppingCartViewModel());
+
+            //Returns a result which will render the partial view with name viewName. 
+            //return View("viewName", model);
         }
 
         public ShoppingCartViewModel GetShoppingCartViewModel()
@@ -29,7 +33,10 @@ namespace QualityBags.ViewComponents
             var viewModel = new ShoppingCartViewModel
             {
                 CartItems = cart.GetCartItems(_context),
-                CartTotal = cart.GetCartTotal(_context)
+                CartTotal = cart.GetCartTotal(_context),
+                GSTPrice = cart.GetGSTPrice(_context),
+                CartSubTotal = cart.GetSubTotal(_context)
+                
             };
 
             return viewModel;

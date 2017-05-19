@@ -127,6 +127,30 @@ namespace QualityBags.Models
             return totalPrice ?? Decimal.Zero;
         }
 
+        /// <summary>
+        /// Get the GST price of shopping cart
+        /// </summary>
+        /// <param name="context"></param>
+        /// <returns></returns>
+        public decimal GetGSTPrice(ApplicationDbContext dbCntxt)
+        {
+            decimal gstPrice = Math.Round((GetCartTotal(dbCntxt) * Convert.ToDecimal(0.15)),2);
+            return gstPrice;
+        }
+
+        /// <summary>
+        /// Get subtotal of shopping cart
+        /// </summary>
+        /// <param name="context"></param>
+        /// <returns></returns>
+        public decimal GetSubTotal(ApplicationDbContext dbCntxt)
+        {
+            decimal subtotal =Math.Round((GetCartTotal(dbCntxt) - GetGSTPrice(dbCntxt)),2);
+            return subtotal;
+        }
+
+
+
         #region Helpers
         private string GetCartID(HttpContext context)
         {

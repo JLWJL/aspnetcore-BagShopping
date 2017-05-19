@@ -46,7 +46,8 @@
       "type": "build"
     },
     "MailKit": "1.16.0",
-    "Microsoft.AspNetCore.Session": "1.0.0"
+    "Microsoft.AspNetCore.Session": "1.0.0",
+    "Microsoft.EntityFrameworkCore": "1.0.1"
   },
 
   "tools": {

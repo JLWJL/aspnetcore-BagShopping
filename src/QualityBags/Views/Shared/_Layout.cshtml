@@ -1,4 +1,5 @@
-﻿<!DOCTYPE html>
+﻿@using QualityBags.Data
+<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8" />
@@ -16,11 +17,16 @@
               asp-fallback-href="~/lib/bootstrap/dist/css/bootstrap.min.css"
               asp-fallback-test-class="sr-only" asp-fallback-test-property="position" asp-fallback-test-value="absolute" />
         <link rel="stylesheet" href="~/css/site.min.css" asp-append-version="true" />
+        <link rel="stylesheet" href="~/css/myCSS.css" />
     </environment>
     @Html.ApplicationInsightsJavaScript(TelemetryConfiguration)
 
 </head>
 <body>
+    @{ 
+        
+    }
+
     <div class="navbar navbar-inverse navbar-fixed-top">
         <div class="container">
             <div class="navbar-header">
@@ -34,10 +40,18 @@
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li><a asp-area="" asp-controller="Home" asp-action="Index" asp-route-cat="">Our Bags</a></li>
-                    <li><a asp-area="" asp-controller="Home" asp-action="Index" asp-route-cat="mens">Wallets</a></li>
-                    <li><a asp-area="" asp-controller="Home" asp-action="Index" asp-route-cat="womens">Purses</a></li>
-                    <li><a asp-area="" asp-controller="Home" asp-action="Index" asp-route-cat="childrens">Backpacks</a></li>
+
+                    <li class="dropdown">
+                        <a class="dropdown-toggle" data-toggle="dropdown">Quality Bags</a>
+                        <ul class="dropdown-menu">
+                          
+                            <li><a asp-area="" asp-controller="Home" asp-action="Index" asp-route-catFilter="">ALL BAGS</a></li>
+@*why model passed in this page is Bag, how pass categories in db?*@ 
+                            
+                            @await Html.PartialAsync("_categoryPartialView", new List<QualityBags.Models.Category>() { new QualityBags.Models.Category { CategoryID = 123, CategoryName = "Test" } }) 
+                        </ul> 
+                    </li>
+
                     @if (User.IsInRole("Admin"))
                     {
                         <li class="dropdown">
@@ -52,8 +66,11 @@
                             </ul>
                         </li>
                     }
+                    <li><a asp-action="Contact"></a></li>
+                    <li><a asp-action="About"></a></li>
                 </ul>
                 @await Html.PartialAsync("_LoginPartial")
+                
             </div>
         </div>
     </div>

@@ -1,16 +1,23 @@
 @model QualityBags.Models.ShoppingCartViewModels.ShoppingCartViewModel
 
 @{
-    var subtotal = Model.CartTotal - Model.GST;
-    var gst = Model.CartTotal * Model.GST;
     ViewData["Title"] = "Your cart";
 }
 
 <div class="container">
     <div class="row">
         <div class="col-sm-2">
+            <h4 class="display-4">Bag ID</h4>
+        </div>
+
+        <div class="col-sm-2">
             <h4 class="display-4">Bag</h4>
         </div>
+
+        <div class="col-sm-2">
+            <h4 class="display-4">Category</h4>
+        </div>
+
         <div class="col-sm-2">
             <h4 class="display-4">Quantity</h4>
         </div>
@@ -21,10 +28,12 @@
 
     @foreach (var item in Model.CartItems)
     {
+ 
         <div class="row">
-            <div class="col-sm-2"><a asp-action="Details" asp-controller="CustomerBags" asp-route-id="@item.Bag.BagID">@item.Bag.BagName</a> </div>
+            <div class="col-sm-2">@item.Bag.BagID</div>
 
-            <div class="col-sm-2"><a asp-action="Details" asp-route-id="@item.Bag.BagID">@item.Bag.BagName</a> </div>
+            <div class="col-sm-2">@item.Bag.BagName</div>
+            <div class="col-sm-2">@item.Bag.Category.CategoryName</div>
 
             <div class="col-sm-2">@item.Count<a asp-action="RemoveFromCart" asp-controller="ShoppingCarts" asp-route-id="@item.Bag.BagID"><span class="glyphicon glyphicon-remove-circle"></span></a></div>
 
@@ -36,21 +45,28 @@
 
     @if (@Model.CartItems.Count > 0)
     {
+        <hr />
         <div class="row">
+            <div class="col-sm-2"></div>
+            <div class="col-sm-2"></div>
             <div class="col-sm-2"></div>
             <div class="col-sm-2">Subtotal:</div>
 
-            <div class="col-sm-2">$@subtotal </div>
+            <div class="col-sm-2">$@Model.CartSubTotal</div>
         </div>
 
         <div class="row">
             <div class="col-sm-2"></div>
+            <div class="col-sm-2"></div>
+            <div class="col-sm-2"></div>
             <div class="col-sm-2">GST:</div>
 
-            <div class="col-sm-2">$@gst </div>
+            <div class="col-sm-2">$@Model.GSTPrice </div>
         </div>
 
         <div class="row">
+            <div class="col-sm-2"></div>
+            <div class="col-sm-2"></div>
             <div class="col-sm-2"></div>
             <div class="col-sm-2">Grand Total:</div>
 
@@ -58,30 +74,16 @@
         </div>
 
         <div class="row">
-            <div class="col-sm-offset-4">
-                <a asp-action="Create" asp-controller="CustomerOrders">
-                    Proceed To Checkout <span class="glyphicon glyphicon-step-forward"></span>
+            <hr />
+            <div class="col-sm-2"></div>
+            <div class="col-sm-2"></div>
+            <div class="col-sm-2"></div>
+            <div class="col-sm-2"><a class="btn btn-danger" asp-action="EmptyCart" asp-controller="ShoppingCarts">Clear Cart</a></div>
+            <div class="col-sm-offset-2">
+                <a class="btn btn-primary" asp-action="Create" asp-controller="CustomerOrders">
+                    Proceed To Checkout<span class="glyphicon glyphicon-step-forward"></span>
                 </a>
             </div>
         </div>
-
     }
-
-</div>
-
-@*<form asp-action="Default2">
-    <div class="form-horizontal">
-        <h4>ShoppingCart</h4>
-        <hr />
-        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Create" class="btn btn-default" />
-            </div>
-        </div>
-    </div>
-</form>*@
-
-<div>
-    <a asp-action="Index">Back to List</a>
 </div>

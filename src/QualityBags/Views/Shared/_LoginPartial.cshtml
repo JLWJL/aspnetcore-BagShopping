@@ -15,13 +15,16 @@
             <li>
                 <button type="submit" class="btn btn-link navbar-btn navbar-link">Log off</button>
             </li>
+            <li><a class="glyphicon glyphicon-shopping-cart" asp-action="">Cart<i class="badge">0</i></a></li>
+
         </ul>
     </form>
 }
 else
 {
-    <ul class="">
+    <ul class="nav navbar-nav navbar-right">
         <li><a asp-area="" asp-controller="Account" asp-action="Register">Register</a></li>
         <li><a asp-area="" asp-controller="Account" asp-action="Login">Log in</a></li>
+        <li><a class="glyphicon glyphicon-shopping-cart" asp-action="">Cart<i class="badge">0</i></a></li>
     </ul>
 }

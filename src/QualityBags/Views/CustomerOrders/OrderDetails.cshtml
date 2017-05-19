@@ -99,7 +99,7 @@
                         <label>Subtotal:</label>
                     </td>
                     <td>
-                        <label>@Model.TotalCost*(1-@Model.GST)</label>
+                        <label>@(Model.TotalCost)</label>
                     </td>
                 </tr>
                 <tr>
@@ -109,7 +109,7 @@
                         <label>GST:</label>
                     </td>
                     <td>
-                        <label>@Model.TotalCost*@Model.GST</label>
+                        <label>@(Model.GST*Model.TotalCost)</label>
                     </td>
                 </tr>
                 <tr>

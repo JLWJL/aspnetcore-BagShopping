@@ -86,6 +86,13 @@ namespace QualityBags.Controllers
                 }
             }
             bag.ImagePath = relativeDir;
+            bag.Category = _context.Categories.Single(c => c.CategoryID == bag.CategoryID);
+            bag.Supplier= _context.Suppliers.Single(s => s.SupplierID== bag.SupplierID);
+            //bag.Category = (Category)(from cats in _context.Categories
+            //               where cats.CategoryID == bag.CategoryID
+            //               select cats);
+
+
             try
             {
                 if (ModelState.IsValid)

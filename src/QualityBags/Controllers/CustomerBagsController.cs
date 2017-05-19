@@ -20,10 +20,27 @@ namespace QualityBags.Controllers
         }
 
         // GET: CustomerBags
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string catFilter = null)
         {
-            var applicationDbContext = _context.Bags.Include(b => b.Category).Include(b => b.Supplier);
-            return View(await applicationDbContext.ToListAsync());
+            /*View by category*/
+            ViewData["CatFilter"] = catFilter;  //Store the current selection of category
+            var Bags = from bags in _context.Bags
+                       select bags;//_context.Bags;  //Retrieve all bags 
+            if (!String.IsNullOrEmpty(catFilter))   //If filter exists, retrieve those bags
+            {
+                Bags = GetBagsByCat(Bags, catFilter);
+            }
+
+
+            //var applicationDbContext = _context.Bags.Include(b => b.Category).Include(b => b.Supplier);
+            return View(await Bags.AsNoTracking().ToListAsync());
+        }
+
+
+        private IQueryable<Bag> GetBagsByCat(IQueryable<Bag> bags, string cat)
+        {
+            IQueryable<Bag> Bags = bags.Where(b => b.Category.CategoryName.Contains(cat));
+            return Bags;
         }
 
         // GET: CustomerBags/Details/5

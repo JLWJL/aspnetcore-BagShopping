@@ -11,8 +11,8 @@ namespace QualityBags.Data
     {
         public static void Initialise(ApplicationDbContext context)
         {
-            context.Database.EnsureCreated(); 
-            //context.Database.Migrate();  
+            //context.Database.EnsureCreated(); 
+            context.Database.Migrate();  
 
             if (context.Bags.Any())
             {
@@ -34,9 +34,9 @@ namespace QualityBags.Data
 
             var categories = new Category[]
             {
-                new Category {CategoryName="Men"},
-                new Category {CategoryName="Women"},
-                new Category {CategoryName="Children"}
+                new Category {CategoryName="Wallets"},
+                new Category {CategoryName="Purses"},
+                new Category {CategoryName="Backpacks"}
             };
             foreach (var c in categories)
             {

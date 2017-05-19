@@ -8,9 +8,10 @@ using QualityBags.Data;
 namespace QualityBags.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20170518223510_AddGSTPrice_SubTotal_In_Order")]
+    partial class AddGSTPrice_SubTotal_In_Order
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "1.0.1")

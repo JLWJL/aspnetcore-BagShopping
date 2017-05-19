@@ -76,8 +76,11 @@ namespace QualityBags.Controllers
 
                 order.Customer = currentUser;
                 order.CustomerID = currentUser.Id;
+
                 order.TotalCost = ShoppingCart.GetCart(this.HttpContext).GetCartTotal(_context);
-                order.SubTotal = order.TotalCost * (1 - order.GST);
+                order.SubTotal = ShoppingCart.GetCart(this.HttpContext).GetSubTotal(_context);
+                order.GSTPrice = ShoppingCart.GetCart(this.HttpContext).GetGSTPrice(_context);
+
                 order.Date = DateTime.Today;
                 order.Status = OrderStatus.Waiting;
                 order.OrderItems = orderItems; //Cannot assign, later on 'order.OderItems = null'

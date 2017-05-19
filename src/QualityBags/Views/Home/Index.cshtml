@@ -1,4 +1,4 @@
-﻿@model IEnumerable<QualityBags.Models.Bag>
+﻿@model PageList<QualityBags.Models.Bag>
 
 @{
     ViewData["Title"] = "Our Bags";
@@ -41,24 +41,47 @@
 
 <hr />
 
-<div class="row text-center">
+<div class="wrapper">
+    <aside id="sidebar">
+        <ul class="side-navbar-list">
+            <li><a asp-action="Index" asp-route-catFilter="">ALL BAGS</a></li>
+            @{ var cats = (List<QualityBags.Models.Category>)ViewBag.AllCategory;
+                foreach (var cat in cats)
+                {
+                    <li><a asp-action="Index" asp-route-catId=@cat.CategoryID>@cat.CategoryName</a></li>
+                }
+            }
+        </ul>
+        <div id="sort-control" class="">
+            <label class="control-label">Sort</label>
+            <select class="">
+                <option value="">- Sort Criteria -</option>
+            </select>
+        </div>
+        <div id="search-control">
+            <form asp-action="Index" asp-controller="Home" method="get">
+                <input type="text" name="SearchString" value="@ViewData["CurrentFilter"]" />
+                <input type="submit" value="Search" class="btn btn-default btn" />
+            </form>
+        </div>
+    </aside>
+<div class="row text-center product-area">
     @{
         var count = 0;
         foreach (var bag in Model)
         {
-            if (count++ % 4 == 0)
+            if (++count % 5 == 0)
             {
                 @:</div>
-                @:<div class="row text-center">
-
+                    @:<div class="row text-center">
             }
 
             <div class="col-md-3 col-sm-6 hero-feature">
                 <div class="thumbnail">
                     <img src="@bag.ImagePath" alt="@bag.BagName">
                     <div class="caption">
-                        <h3>Feature Label</h3>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
+                        <h4>@bag.BagName - @Html.DisplayFor(b => bag.Category.CategoryName)</h4>
+
                         <p>
                             <span>$ @bag.Price</span>
                             <a class="btn btn-primary" asp-controller="ShoppingCarts" asp-action="AddToCart" asp-route-id="@bag.BagID">Add</a>
@@ -70,5 +93,30 @@
         }
 
     }
+
+
+
+</div>
+
+    @{
+        var prevDisabled = !Model.HasPreviousPage ? "disabled" : "";
+        var nextDisabled = !Model.HasNextPage ? "disabled" : "";
+    }
+    <div class="text-center">
+        <a asp-action="Index"
+           asp-route-sortOrder="@ViewData["CurrentSort"]"
+           asp-route-page="@(Model.PageIndex - 1)"
+           asp-route-currentCat="@ViewData["CurrentCat"]"
+           class="btn btn-default @prevDisabled pg-pre">
+            <span class="glyphicon glyphicon-step-backward"></span>Previous
+        </a>
+        <a asp-action="Index"
+           asp-route-sortOrder="@ViewData["CurrentSort"]"
+           asp-route-page="@(Model.PageIndex + 1)"
+           asp-route-currentCat="@ViewData["CurrentCat"]"
+           class="btn btn-default @nextDisabled pg-next">
+            Next<span class="glyphicon glyphicon-step-forward"></span>
+        </a>
+    </div>
 </div>
 

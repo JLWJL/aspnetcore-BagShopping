@@ -22,9 +22,15 @@ namespace QualityBags.Models
         
         [DisplayFormat(DataFormatString ="{0:C}")]
         public decimal SubTotal { get; set; }
+
+       
         public decimal GST  {
             get { return gst; }
         }
+
+        [DisplayFormat(DataFormatString = "{0:C}")]
+        public decimal GSTPrice { get; set; }
+
         [DisplayFormat(DataFormatString = "{0:C}")]
         public decimal TotalCost { get; set; }
 
