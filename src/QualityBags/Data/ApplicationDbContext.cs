@@ -30,11 +30,15 @@ namespace QualityBags.Data
 
             modelBuilder.Entity<Bag>().ToTable("Bag");
             modelBuilder.Entity<Supplier>().ToTable("Supplier");
+            modelBuilder.Entity<Supplier>().HasMany(s => s.Bags).WithOne("Supplier").OnDelete(DeleteBehavior.Cascade);
+
             modelBuilder.Entity<Category>().ToTable("Category");
-            //modelBuilder.Entity<Category>().HasMany(c => c.Bags).WithOne("Category").OnDelete(DeleteBehavior.SetNull);
+            modelBuilder.Entity<Category>().HasMany(c => c.Bags).WithOne("Category").OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<CartItem>().ToTable("CartItem");
             modelBuilder.Entity<Order>().ToTable("Order");
+            modelBuilder.Entity<Order>().HasOne(o => o.Customer).WithMany(c => c.Orders).OnDelete(DeleteBehavior.Cascade);
+
             modelBuilder.Entity<OrderItem>().ToTable("OrderItem");
             modelBuilder.Entity<OrderItem>().HasOne(o => o.Order).WithMany(o => o.OrderItems).OnDelete(DeleteBehavior.Cascade);
         }
