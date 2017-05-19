@@ -23,8 +23,8 @@
 
 </head>
 <body>
-    @{ 
-        
+    @{
+
     }
 
     <div class="navbar navbar-inverse navbar-fixed-top">
@@ -36,7 +36,7 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a asp-area="" asp-controller="Home" asp-action="Index" class="navbar-brand"><img class="img-log img-responsive"src="~/images/QualityBag_logo.png" alt="Quality Bag Logo"></a>
+                <a asp-area="" asp-controller="Home" asp-action="Index" class="navbar-brand"><img class="img-log img-responsive" src="~/images/QualityBag_logo.png" alt="Quality Bag Logo"></a>
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
@@ -44,13 +44,15 @@
                     <li class="dropdown">
                         <a class="dropdown-toggle" data-toggle="dropdown">Quality Bags</a>
                         <ul class="dropdown-menu">
-                          
+
                             <li><a asp-area="" asp-controller="Home" asp-action="Index" asp-route-catFilter="">ALL BAGS</a></li>
-@*why model passed in this page is Bag, how pass categories in db?*@ 
-                            
-                            @await Html.PartialAsync("_categoryPartialView", new List<QualityBags.Models.Category>() { new QualityBags.Models.Category { CategoryID = 123, CategoryName = "Test" } }) 
-                        </ul> 
+                            @*why model passed in this page is Bag, how pass categories in db?*@
+
+                            @await Html.PartialAsync("_categoryPartialView", new List<QualityBags.Models.Category>() { new QualityBags.Models.Category { CategoryID = 123, CategoryName = "Test" } })
+                        </ul>
                     </li>
+                    <li><a asp-action="Contact" asp-controller="Home">Contact</a></li>
+                    <li><a asp-action="About" asp-controller="Home">About</a></li>
 
                     @if (User.IsInRole("Admin"))
                     {
@@ -70,79 +72,62 @@
                     <li><a asp-action="About"></a></li>
                 </ul>
                 @await Html.PartialAsync("_LoginPartial")
-                
+
             </div>
         </div>
     </div>
     <div class="container body-content">
         @RenderBody()
-        <hr />
 
-        <div>
-            @await Component.InvokeAsync("ShoppingCartViewModel")
-        </div>
 
-        @*<footer class="footer-distributed">
 
-            <div class="footer-left">
+        <section class="footer">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-4  col-md-4 col-sm-4">
+                        <div class="footer_dv">
+                            <h4>Services</h4>
+                            <ul>
+                                <li class="line_rv"><a href="canon-printer-support.php">Canon Printer Support</a></li>
 
-                <h3>Company<span>logo</span></h3>
+                                <li><a href="hp-printer-support.php">Hp printer Support</a></li>
+                                <li><a href="dell-printer-support.php">Dell Printer Support</a></li>
+                                <li><a href="epson-printer-support.php">Epson printer Support</a></li>
+                                <li><a href="samsung-printer-support.php">Samsung Printer Support</a></li>
+                                <li><a href="lexmark-printer-support.php">Lexmark Printer Support</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-lg-4  col-md-4 col-sm-4">
+                        <div class="footer_dv">
+                            <h4>Social  Media</h4>
+                            <ul>
+                                <li><a href="#"><i class="fa fa-facebook-official" aria-hidden="true"></i>
+</a></li>
+                                <li><a href="panasonic-printer-support.php">Panasonic Printer Support</a></li>
+                                <li><a href="xerox-printer-support.php">Xerox Printer Support</a></li>
+                                <li><a href="brother-printer-support.php">Brother printer support</a></li>
+                                <li><a href="zebra-printer-support.php">Zebra printer support</a></li>
+                                <li><a href="lenovo-printer-support.php">Lenovo printer Support</a></li>
 
-                <p class="footer-links">
-                    <a href="#">Home</a>
-                    ·
-                    <a href="#">Blog</a>
-                    ·
-                    <a href="#">Pricing</a>
-                    ·
-                    <a href="#">About</a>
-                    ·
-                    <a href="#">Faq</a>
-                    ·
-                    <a href="#">Contact</a>
-                </p>
 
-                <p class="footer-company-name">Company Name &copy; 2015</p>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-lg-4  col-md-4 col-sm-4">
+                        <div class="footer_dv">
+                            <h4>Contact us</h4>
+                            <h3>Quality Bags Ltd.</h3>
+                            <h5>
+                                139, Carrington Rd<br />
+                                Auckland, New Zealand<br>
+
+                            </h5>
+                        </div>
+                    </div>
+                </div>
             </div>
-
-            <div class="footer-center">
-
-                <div>
-                    <i class="fa fa-map-marker"></i>
-                    <p><span>21 Revolution Street</span> Paris, France</p>
-                </div>
-
-                <div>
-                    <i class="fa fa-phone"></i>
-                    <p>+1 555 123456</p>
-                </div>
-
-                <div>
-                    <i class="fa fa-envelope"></i>
-                    <p><a href="mailto:support@company.com">support@company.com</a></p>
-                </div>
-
-            </div>
-
-            <div class="footer-right">
-
-                <p class="footer-company-about">
-                    <span>About the company</span>
-                    Lorem ipsum dolor sit amet, consectateur adispicing elit. Fusce euismod convallis velit, eu auctor lacus vehicula sit amet.
-                </p>
-
-                <div class="footer-icons">
-
-                    <a href="#"><i class="fa fa-facebook"></i></a>
-                    <a href="#"><i class="fa fa-twitter"></i></a>
-                    <a href="#"><i class="fa fa-linkedin"></i></a>
-                    <a href="#"><i class="fa fa-github"></i></a>
-
-                </div>
-
-            </div>
-
-        </footer>*@
+        </section>
     </div>
 
     <environment names="Development">
@@ -163,5 +148,17 @@
     </environment>
 
     @RenderSection("scripts", required: false)
+
+    <script>
+
+        $(document).ready(function () {
+            $("#cart-icon").click(function () {
+                $(".cart-container").slideToggle(500, function () {
+
+                });
+
+            })
+        });
+    </script>
 </body>
 </html>

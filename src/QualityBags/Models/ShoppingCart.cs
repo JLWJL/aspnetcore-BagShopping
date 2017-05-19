@@ -101,7 +101,7 @@ namespace QualityBags.Models
         /// <returns></returns>
         public List<CartItem> GetCartItems(ApplicationDbContext dbCntxt)
         {
-            List<CartItem> cartItems = dbCntxt.CartItems.Include(i => i.Bag).Where(i => i.CartID == ShoppingCartID).ToList();
+            List<CartItem> cartItems = dbCntxt.CartItems.Include(i => i.Bag).ThenInclude(b=>b.Category).Where(i => i.CartID == ShoppingCartID).ToList();
             return cartItems;
         }
 

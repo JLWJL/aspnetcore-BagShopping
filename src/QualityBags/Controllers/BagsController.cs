@@ -31,8 +31,8 @@ namespace QualityBags.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> Index()
         {   
-            var shoppingContext = _context.Bags.Include(b => b.Category).Include(b => b.Supplier);
-            return View(await _context.Bags.ToListAsync());
+            var bags = _context.Bags.Include(b => b.Category).Include(b => b.Supplier);
+            return View(await bags.ToListAsync());
         }
 
         // GET: Bags/Details/5
@@ -40,13 +40,13 @@ namespace QualityBags.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return View("Error");
             }
 
-            var bag = await _context.Bags.SingleOrDefaultAsync(m => m.BagID == id);
+            var bag = await _context.Bags.Include(b=>b.Category).Include(b=>b.Supplier).SingleOrDefaultAsync(m => m.BagID == id);
             if (bag == null)
             {
-                return NotFound();
+                return View("Error");
             }
 
             return View(bag);
@@ -119,13 +119,13 @@ namespace QualityBags.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return View("Error");
             }
 
             var bag = await _context.Bags.SingleOrDefaultAsync(m => m.BagID == id);
             if (bag == null)
             {
-                return NotFound();
+                return View("Error");
             }
             PopulateCategoryList(bag.CategoryID);
             PopulateSupplierList(bag.SupplierID);
@@ -141,7 +141,7 @@ namespace QualityBags.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return View("Error");
             }
             var editedBag = await _context.Bags.SingleOrDefaultAsync(b=>b.BagID==id);
 
@@ -185,13 +185,13 @@ namespace QualityBags.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return View("Error");
             }
 
             var bag = await _context.Bags.SingleOrDefaultAsync(m => m.BagID == id);
             if (bag == null)
             {
-                return NotFound();
+                return View("Error");
             }
 
             return View(bag);

@@ -30,13 +30,13 @@ namespace QualityBags.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return View("Error");
             }
 
             var order = await _context.Orders.SingleOrDefaultAsync(m => m.OrderID == id);
             if (order == null)
             {
-                return NotFound();
+                return View("Error");
             }
 
             return View(order);
@@ -69,13 +69,13 @@ namespace QualityBags.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return View("Error");
             }
 
             var order = await _context.Orders.SingleOrDefaultAsync(m => m.OrderID == id);
             if (order == null)
             {
-                return NotFound();
+                return View("Error");
             }
             return View(order);
         }
@@ -89,7 +89,7 @@ namespace QualityBags.Controllers
         {
             if (id != order.OrderID)
             {
-                return NotFound();
+                return View("Error");
             }
 
             if (ModelState.IsValid)
@@ -103,7 +103,7 @@ namespace QualityBags.Controllers
                 {
                     if (!OrderExists(order.OrderID))
                     {
-                        return NotFound();
+                        return View("Error");
                     }
                     else
                     {
@@ -120,13 +120,13 @@ namespace QualityBags.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return View("Error");
             }
 
             var order = await _context.Orders.SingleOrDefaultAsync(m => m.OrderID == id);
             if (order == null)
             {
-                return NotFound();
+                return View("Error");
             }
 
             return View(order);

@@ -20,17 +20,20 @@ namespace QualityBags.Models
 
         public string CustomerID{ get; set; }
         
+        //Subtotal
         [DisplayFormat(DataFormatString ="{0:C}")]
         public decimal SubTotal { get; set; }
 
-       
+       //GST rate
         public decimal GST  {
             get { return gst; }
         }
 
+        //GST price
         [DisplayFormat(DataFormatString = "{0:C}")]
         public decimal GSTPrice { get; set; }
 
+        //Grand total
         [DisplayFormat(DataFormatString = "{0:C}")]
         public decimal TotalCost { get; set; }
 

@@ -26,13 +26,27 @@
             @Html.DisplayNameFor(model => model.ImagePath)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.ImagePath)
+            <div class="col-md-3 col-sm-3">
+                <img class="img img-responsive thumbnail" src="@Html.DisplayFor(model => model.ImagePath)"/>
+            </div>
         </dd>
         <dt>
             @Html.DisplayNameFor(model => model.Price)
         </dt>
         <dd>
             @Html.DisplayFor(model => model.Price)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Category)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Category.CategoryName)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Supplier)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Supplier.FullName)
         </dd>
     </dl>
 </div>

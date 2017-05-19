@@ -48,13 +48,13 @@ namespace QualityBags.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return View("Error");
             }
 
             var bag = await _context.Bags.SingleOrDefaultAsync(m => m.BagID == id);
             if (bag == null)
             {
-                return NotFound();
+                return View("Error");
             }
 
             return View(bag);
@@ -91,7 +91,7 @@ namespace QualityBags.Controllers
         //{
         //    if (id == null)
         //    {
-        //        return NotFound();
+        //        return View("Error");
         //    }
 
         //    var bag = await _context.Bags.SingleOrDefaultAsync(m => m.BagID == id);

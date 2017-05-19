@@ -30,9 +30,21 @@ namespace QualityBags.Controllers
         /// Return all orders of current user
         /// </summary>
         /// <returns></returns>
-        public IActionResult Index()
+        public async Task<IActionResult> Index(string userID =null)
         {
-            var user = _userManager.GetUserAsync(User).Result;
+            ApplicationUser user;
+            if (userID == null)
+            {
+                user = _userManager.GetUserAsync(User).Result;
+            }
+            else
+            {
+                user = await _userManager.FindByIdAsync(userID.ToString());
+                if (user == null)
+                {
+                    return View("Error");
+                }
+            }
             var userOrders = (from orders in _context.Orders where orders.Customer == user orderby orders.Date select orders).ToList();
 
             return View(userOrders);
@@ -102,7 +114,7 @@ namespace QualityBags.Controllers
         {
             if (id==null)
             {
-                return NotFound();
+                return View("Error");
             }
 
             Order order = await _context.Orders.Include(o=>o.Customer).AsNoTracking().SingleOrDefaultAsync(o => o.OrderID == id);
@@ -117,7 +129,7 @@ namespace QualityBags.Controllers
             }
             else
             {
-                return NotFound();
+                return View("Error");
             }
         }
 
@@ -127,13 +139,13 @@ namespace QualityBags.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return View("Error");
             }
 
             var order = await _context.Orders.SingleOrDefaultAsync(m => m.OrderID == id);
             if (order == null)
             {
-                return NotFound();
+                return View("Error");
             }
 
             return View(order);
@@ -148,13 +160,13 @@ namespace QualityBags.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return View("Error");
             }
 
             var order = await _context.Orders.SingleOrDefaultAsync(m => m.OrderID == id);
             if (order == null)
             {
-                return NotFound();
+                return View("Error");
             }
             return View(order);
         }
@@ -168,7 +180,7 @@ namespace QualityBags.Controllers
         {
             if (id != order.OrderID)
             {
-                return NotFound();
+                return View("Error");
             }
 
             if (ModelState.IsValid)
@@ -182,7 +194,7 @@ namespace QualityBags.Controllers
                 {
                     if (!OrderExists(order.OrderID))
                     {
-                        return NotFound();
+                        return View("Error");
                     }
                     else
                     {
@@ -199,13 +211,13 @@ namespace QualityBags.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return View("Error");
             }
 
             var order = await _context.Orders.SingleOrDefaultAsync(m => m.OrderID == id);
             if (order == null)
             {
-                return NotFound();
+                return View("Error");
             }
 
             return View(order);

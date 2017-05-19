@@ -34,13 +34,13 @@ namespace QualityBags.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return View("Error");
             }
 
             var supplier = await _context.Suppliers.SingleOrDefaultAsync(m => m.SupplierID == id);
             if (supplier == null)
             {
-                return NotFound();
+                return View("Error");
             }
 
             return View(supplier);
@@ -73,13 +73,13 @@ namespace QualityBags.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return View("Error");
             }
 
             var supplier = await _context.Suppliers.SingleOrDefaultAsync(m => m.SupplierID == id);
             if (supplier == null)
             {
-                return NotFound();
+                return View("Error");
             }
             return View(supplier);
         }
@@ -93,7 +93,7 @@ namespace QualityBags.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return View("Error");
             }
 
             var editedSupplier = await _context.Suppliers.SingleOrDefaultAsync(s => s.SupplierID == id);
@@ -125,13 +125,13 @@ namespace QualityBags.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return View("Error");
             }
 
             var supplier = await _context.Suppliers.SingleOrDefaultAsync(m => m.SupplierID == id);
             if (supplier == null)
             {
-                return NotFound();
+                return View("Error");
             }
 
             return View(supplier);

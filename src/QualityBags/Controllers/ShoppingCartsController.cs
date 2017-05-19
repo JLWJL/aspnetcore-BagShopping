@@ -48,7 +48,7 @@ namespace QualityBags.Controllers
             }
             else
             {
-                return NotFound();
+                return View("Error");
             }
         }
 
@@ -81,7 +81,7 @@ namespace QualityBags.Controllers
             }
             else
             {
-                return NotFound();
+                return View("Error");
             }
         }
 
@@ -104,13 +104,13 @@ namespace QualityBags.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return View("Error");
             }
 
             var shoppingCart = await _context.ShoppingCart.SingleOrDefaultAsync(m => m.ShoppingCartID == id);
             if (shoppingCart == null)
             {
-                return NotFound();
+                return View("Error");
             }
 
             return View(shoppingCart);
@@ -143,13 +143,13 @@ namespace QualityBags.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return View("Error");
             }
 
             var shoppingCart = await _context.ShoppingCart.SingleOrDefaultAsync(m => m.ShoppingCartID == id);
             if (shoppingCart == null)
             {
-                return NotFound();
+                return View("Error");
             }
             return View(shoppingCart);
         }
@@ -163,7 +163,7 @@ namespace QualityBags.Controllers
         {
             if (id != shoppingCart.ShoppingCartID)
             {
-                return NotFound();
+                return View("Error");
             }
 
             if (ModelState.IsValid)
@@ -177,7 +177,7 @@ namespace QualityBags.Controllers
                 {
                     if (!ShoppingCartExists(shoppingCart.ShoppingCartID))
                     {
-                        return NotFound();
+                        return View("Error");
                     }
                     else
                     {
@@ -194,13 +194,13 @@ namespace QualityBags.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return View("Error");
             }
 
             var shoppingCart = await _context.ShoppingCart.SingleOrDefaultAsync(m => m.ShoppingCartID == id);
             if (shoppingCart == null)
             {
-                return NotFound();
+                return View("Error");
             }
 
             return View(shoppingCart);

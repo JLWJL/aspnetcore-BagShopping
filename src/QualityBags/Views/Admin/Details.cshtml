@@ -136,6 +136,12 @@
         <dd>
             @Html.DisplayFor(model => model.UserName)
         </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Orders)
+        </dt>
+        <dd>
+            <a asp-action="Index" asp-controller="CustomerOrders" asp-route-userID="@Model.Id">View Orders</a>
+        </dd>
     </dl>
 </div>
 <div>

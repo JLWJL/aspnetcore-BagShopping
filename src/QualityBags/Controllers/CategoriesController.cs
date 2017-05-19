@@ -32,13 +32,13 @@ namespace QualityBags.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return View("Error");
             }
 
             var category = await _context.Categories.SingleOrDefaultAsync(m => m.CategoryID == id);
             if (category == null)
             {
-                return NotFound();
+                return View("Error");
             }
 
             return View(category);
@@ -71,13 +71,13 @@ namespace QualityBags.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return View("Error");
             }
 
             var category = await _context.Categories.SingleOrDefaultAsync(m => m.CategoryID == id);
             if (category == null)
             {
-                return NotFound();
+                return View("Error");
             }
             return View(category);
         }
@@ -91,7 +91,7 @@ namespace QualityBags.Controllers
         {
             if (id != category.CategoryID)
             {
-                return NotFound();
+                return View("Error");
             }
 
             if (ModelState.IsValid)
@@ -105,7 +105,7 @@ namespace QualityBags.Controllers
                 {
                     if (!CategoryExists(category.CategoryID))
                     {
-                        return NotFound();
+                        return View("Error");
                     }
                     else
                     {
@@ -122,13 +122,13 @@ namespace QualityBags.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return View("Error");
             }
 
             var category = await _context.Categories.SingleOrDefaultAsync(m => m.CategoryID == id);
             if (category == null)
             {
-                return NotFound();
+                return View("Error");
             }
 
             return View(category);

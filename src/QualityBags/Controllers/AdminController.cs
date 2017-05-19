@@ -32,13 +32,13 @@ namespace QualityBags.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return View("Error");
             }
 
             var applicationUser = await _context.ApplicationUsers.SingleOrDefaultAsync(m => m.Id == id);
             if (applicationUser == null)
             {
-                return NotFound();
+                return View("Error");
             }
 
             return View(applicationUser);
@@ -71,13 +71,13 @@ namespace QualityBags.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return View("Error");
             }
 
             var applicationUser = await _context.ApplicationUsers.SingleOrDefaultAsync(m => m.Id == id);
             if (applicationUser == null)
             {
-                return NotFound();
+                return View("Error");
             }
             return View(applicationUser);
         }
@@ -91,7 +91,7 @@ namespace QualityBags.Controllers
         {
             if (id != applicationUser.Id)
             {
-                return NotFound();
+                return View("Error");
             }
 
             if (ModelState.IsValid)
@@ -105,7 +105,7 @@ namespace QualityBags.Controllers
                 {
                     if (!ApplicationUserExists(applicationUser.Id))
                     {
-                        return NotFound();
+                        return View("Error");
                     }
                     else
                     {
@@ -122,13 +122,13 @@ namespace QualityBags.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return View("Error");
             }
 
             var applicationUser = await _context.ApplicationUsers.SingleOrDefaultAsync(m => m.Id == id);
             if (applicationUser == null)
             {
-                return NotFound();
+                return View("Error");
             }
 
             return View(applicationUser);
@@ -155,13 +155,13 @@ namespace QualityBags.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return View("Error");
             }
 
             var user = await _context.Users.SingleAsync(u => u.Id == id);
             if (user == null)
             {
-                return NotFound();
+                return View("Error");
             }
             user.Enabled = !user.Enabled;
             _context.Update(user);
