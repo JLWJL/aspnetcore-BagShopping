@@ -35,6 +35,6 @@ namespace QualityBags.Migrations
                 principalColumn: "SupplierID",
                 onDelete: ReferentialAction.Restrict);
         }
-    }
+    
     }
 }

@@ -83,7 +83,7 @@ namespace QualityBags.Controllers
 
         public IActionResult Contact()
         {
-            ViewData["Message"] = "Your contact page.";
+            ViewData["Message"] = "We'd Love To Hear Your Voice :)";
 
             return View();
         }

@@ -41,6 +41,8 @@ namespace QualityBags.Data
 
             modelBuilder.Entity<OrderItem>().ToTable("OrderItem");
             modelBuilder.Entity<OrderItem>().HasOne(o => o.Order).WithMany(o => o.OrderItems).OnDelete(DeleteBehavior.Cascade);
+            modelBuilder.Entity<OrderItem>().HasOne(o => o.Bag).WithMany(b => b.OrderItems).OnDelete(DeleteBehavior.Cascade);
+
         }
 
     }

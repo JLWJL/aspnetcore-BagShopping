@@ -52,17 +52,19 @@
                 }
             }
         </ul>
-        <div id="sort-control" class="">
-            <label class="control-label">Sort</label>
-            <select class="">
-                <option value="">- Sort Criteria -</option>
-            </select>
-        </div>
-        <div id="search-control">
-            <form asp-action="Index" asp-controller="Home" method="get">
-                <input type="text" name="SearchString" value="@ViewData["CurrentFilter"]" />
-                <input type="submit" value="Search" class="btn btn-default btn" />
-            </form>
+        <div id="content-control-tool">
+            <div id="sort-control" class="">
+                <label class="control-label">Sort</label>
+                <select class="">
+                    <option value="">- Sort Criteria -</option>
+                </select>
+            </div>
+            <div id="search-control">
+                <form asp-action="Index" asp-controller="Home" method="get">
+                    <input type="text" name="SearchString" value="@ViewData["CurrentFilter"]" />
+                    <input type="submit" value="Search" class="btn btn-default btn" />
+                </form>
+            </div>
         </div>
     </aside>
 <div class="row text-center product-area">

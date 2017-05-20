@@ -72,7 +72,7 @@ namespace QualityBags.Controllers
         /// <returns></returns>
         public ActionResult RemoveFromCart(int id)
         {
-            var bagToRemove = _context.Bags.Single(b => b.BagID == id);
+            var bagToRemove = _context.Bags.SingleOrDefault(b => b.BagID == id);
             if (bagToRemove != null)
             {
                 var cart = ShoppingCart.GetCart(this.HttpContext);

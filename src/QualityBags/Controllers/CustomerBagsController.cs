@@ -23,25 +23,20 @@ namespace QualityBags.Controllers
         public async Task<IActionResult> Index(string catFilter = null)
         {
             /*View by category*/
-            ViewData["CatFilter"] = catFilter;  //Store the current selection of category
-            var Bags = from bags in _context.Bags
-                       select bags;//_context.Bags;  //Retrieve all bags 
-            if (!String.IsNullOrEmpty(catFilter))   //If filter exists, retrieve those bags
-            {
-                Bags = GetBagsByCat(Bags, catFilter);
-            }
+            //ViewData["CatFilter"] = catFilter;  //Store the current selection of category
+            //var Bags = from bags in _context.Bags
+            //           select bags;//_context.Bags;  //Retrieve all bags 
+            //if (!String.IsNullOrEmpty(catFilter))   //If filter exists, retrieve those bags
+            //{
+            //    Bags = GetBagsByCat(Bags, catFilter);
+            //}
 
 
             //var applicationDbContext = _context.Bags.Include(b => b.Category).Include(b => b.Supplier);
-            return View(await Bags.AsNoTracking().ToListAsync());
+            return View("Error");
         }
 
 
-        private IQueryable<Bag> GetBagsByCat(IQueryable<Bag> bags, string cat)
-        {
-            IQueryable<Bag> Bags = bags.Where(b => b.Category.CategoryName.Contains(cat));
-            return Bags;
-        }
 
         // GET: CustomerBags/Details/5
         public async Task<IActionResult> Details(int? id)
@@ -57,7 +52,7 @@ namespace QualityBags.Controllers
                 return View("Error");
             }
 
-            return View(bag);
+            return View("Error");
         }
 
         // GET: CustomerBags/Create
