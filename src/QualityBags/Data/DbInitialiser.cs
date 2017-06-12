@@ -32,17 +32,17 @@ namespace QualityBags.Data
             //}
             //context.SaveChanges();
 
-            var categories = new Category[]
-            {
-                new Category {CategoryName="Wallets"},
-                new Category {CategoryName="Purses"},
-                new Category {CategoryName="Backpacks"}
-            };
-            foreach (var c in categories)
-            {
-                context.Categories.Add(c);
-            }
-            context.SaveChanges();
+            //var categories = new Category[]
+            //{
+            //    new Category {CategoryName="Wallets"},
+            //    new Category {CategoryName="Purses"},
+            //    new Category {CategoryName="Backpacks"}
+            //};
+            //foreach (var c in categories)
+            //{
+            //    context.Categories.Add(c);
+            //}
+            //context.SaveChanges();
 
 
             //var bags = new Bag[]

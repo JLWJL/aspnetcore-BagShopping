@@ -20,7 +20,7 @@ namespace QualityBags.Controllers
         }
 
         // GET: CustomerBags
-        public async Task<IActionResult> Index(string catFilter = null)
+        public IActionResult Index(string catFilter = null)
         {
             /*View by category*/
             //ViewData["CatFilter"] = catFilter;  //Store the current selection of category

@@ -44,6 +44,14 @@ namespace QualityBags.Controllers
         public IActionResult Login(string returnurl = null)
         {
             ViewData["ReturnUrl"] = returnurl;
+
+            /*Later on, fixe multiple login*/
+
+            //var user = _userManager.GetUserAsync(User);
+            //if (user!=null)
+            //{
+            //    return View("LoggedAlready");
+            //}
             return View();
         }
 

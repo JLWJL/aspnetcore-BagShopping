@@ -7,9 +7,11 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using QualityBags.Data;
 using QualityBags.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace QualityBags.Controllers
 {
+    [Authorize(Roles ="Admin")]
     public class OrdersController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -71,7 +73,7 @@ namespace QualityBags.Controllers
             {
                 return View("Error");
             }
-
+            //ViewData["OrderStatus"] = new SelectList<string> { OrderStatus.Waiting.ToString(), OrderStatus.Shipped.ToString() };
             var order = await _context.Orders.SingleOrDefaultAsync(m => m.OrderID == id);
             if (order == null)
             {
@@ -123,7 +125,7 @@ namespace QualityBags.Controllers
                 return View("Error");
             }
 
-            var order = await _context.Orders.SingleOrDefaultAsync(m => m.OrderID == id);
+            var order = await _context.Orders.Include(o=>o.OrderItems).ThenInclude(oi=>oi.Bag).SingleOrDefaultAsync(m => m.OrderID == id);
             if (order == null)
             {
                 return View("Error");

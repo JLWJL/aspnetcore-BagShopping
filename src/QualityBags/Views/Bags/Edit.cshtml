@@ -15,7 +15,7 @@
         <div class="form-group">
             <label asp-for="ImagePath" class="col-md-2 control-label"></label>
             <div class="col-md-10">
-                <img src="@Model.ImagePath" alt="Bag Image" style="width:100px;height:100px;border:1px solid grey" />
+                <img id="img-preview" src="@Href("~"+Model.ImagePath)" alt="Bag Image" style="width:100px;height:100px;border:1px solid grey" />
                 <input type="file" id="uploadFile" name="uploadFile" value="Change"/>
             </div>
         </div>

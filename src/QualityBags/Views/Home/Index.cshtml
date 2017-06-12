@@ -78,9 +78,9 @@
                     @:<div class="row text-center">
             }
 
-            <div class="col-md-3 col-sm-6 hero-feature">
+            <div class="col-md-3 col-sm-6 bag-container">
                 <div class="thumbnail">
-                    <img src="@bag.ImagePath" alt="@bag.BagName">
+                    <img src="@Href("~"+bag.ImagePath)" alt="@bag.BagName" class="img img-responsive bag-img">
                     <div class="caption">
                         <h4>@bag.BagName - @Html.DisplayFor(b => bag.Category.CategoryName)</h4>
 

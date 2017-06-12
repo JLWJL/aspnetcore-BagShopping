@@ -76,7 +76,7 @@ namespace QualityBags.Controllers
 
         public IActionResult About()
         {
-            ViewData["Message"] = "Your application description page.";
+            ViewData["Message"] = "Who We Are";
 
             return View();
         }

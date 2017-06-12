@@ -1,7 +1,7 @@
 @model IEnumerable<QualityBags.Models.Bag>
 
 @{
-    ViewData["Title"] = "All Category";
+    ViewData["Title"] = "All Bags";
 }
 
 <h2>Index</h2>
@@ -30,10 +30,11 @@
     </thead>
     <tbody>
 @foreach (var item in Model) {
-    var errImg = Href("~/images/Bags/Default.jpg");
+    var errImg = Href("~/images/Bags/Default.png");
+    var imgSrc = Href("~" + item.ImagePath);
         <tr>
             <td>
-                <img src="@item.ImagePath" alt="Bag image" style="width:100px; height:100px" onerror="this.onerror=null;this.src='@errImg'"/>
+                <img src="@imgSrc" alt="Bag image" style="width:100px; height:100px" onerror="this.onerror=null;this.src='@errImg'"/>
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.BagName)

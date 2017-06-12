@@ -25,9 +25,13 @@ body{
 	height:80px;
 }
 
-.navbar-nav li a{
+.navbar-inverse .navbar-nav li a{
 	padding-top: 30px;
-	color:#ff7c26!important;
+	color:#ff7c26;
+}
+
+.navbar-inverse .navbar-nav li a:hover{
+	color:#3c1b02;
 }
 
 .navbar-nav li a:hover{
@@ -35,7 +39,7 @@ body{
 }
 
 .navbar-nav .navbar-link{
-	color:#ff7c26!important;
+	color:#ff7c26;
 }
 
 /*Side Navigation*/
@@ -108,6 +112,23 @@ padding-left:0;
     width:8em;
     background-color:#ff7c26;
 }
+
+
+/*image preview frame*/
+#img-preview{
+     width:8em;
+     height:8em;
+     border:solid 1px grey;
+}
+
+.bag-container .thumbnail img{
+    width:8em;
+    height:8em;
+}
+
+
+
+
 
 /*Shopping cart*/
 .cart-container{

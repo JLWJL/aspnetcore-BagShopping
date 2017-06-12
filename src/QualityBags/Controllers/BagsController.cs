@@ -28,7 +28,7 @@ namespace QualityBags.Controllers
         }
 
         // GET: Bags
-        [AllowAnonymous]
+
         public async Task<IActionResult> Index()
         {   
             var bags = _context.Bags.Include(b => b.Category).Include(b => b.Supplier);
@@ -72,13 +72,13 @@ namespace QualityBags.Controllers
 
             if (uploadFile == null)
             {
-                relativeDir = "/images/Bags/Default.jpg";
+                relativeDir = "/images/Bags/Default.png";
             }
             else
             {
                 fileName = ContentDispositionHeaderValue.Parse(uploadFile.ContentDisposition)
                                                                 .FileName.Trim('"');
-                relativeDir = "/images/Bags/"+ bag.BagName + "_" + fileName;
+                relativeDir = "/images/Bags/"+ bag.BagName.Replace(" ","_") + "_" + fileName;
                 using(FileStream fs = System.IO.File.Create(_hostingEnv.WebRootPath + relativeDir))
                 {
                     await uploadFile.CopyToAsync(fs);

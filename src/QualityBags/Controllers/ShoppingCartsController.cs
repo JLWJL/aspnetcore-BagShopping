@@ -119,7 +119,7 @@ namespace QualityBags.Controllers
         // GET: ShoppingCarts/Create
         public IActionResult Create()
         {
-            return View();
+            return View("Error");
         }
 
         // POST: ShoppingCarts/Create
