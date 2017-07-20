@@ -7,6 +7,7 @@ using QualityBags.Data;
 using Microsoft.EntityFrameworkCore;
 using QualityBags.Models;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using System.Collections;
 
 namespace QualityBags.Controllers
 {
@@ -19,37 +20,78 @@ namespace QualityBags.Controllers
             _context = context;
         }
 
-        public async Task<IActionResult> Index(int? catID, int? currentCat, int? page, string searchStr = null, string sortStr = null)
+        public async Task<IActionResult> Index(
+            int? catID,
+            int? curCat,
+            string srcStr,
+            string curFilter,
+            string srtStr,
+            int? page)
         {
             int pagesize = 8;
+
             //UpdateCatForAllBags();
-            ViewBag.AllCategory = await _context.Categories.ToListAsync();/*Pass all categories into view*/
-            ViewBag.SortSelection = new SelectList(new List<object> {}); //Pass sort selections
+            ViewBag.AllCategory = await _context.Categories.ToListAsync();//For category options
 
-            //Store search condition and sort condition
-            ViewData["SearchString"] = searchStr;
-            ViewData["SortString"] = sortStr;
+            //Pass sort selections
+            ViewBag.SortSelection = new List<SelectListItem> {
+                    new SelectListItem {Text="Name", Value= "name" },
+                    new SelectListItem { Text = "Price", Value = "price" }
+            };
 
-            /*View by category*/
-            var Bags = from bags in _context.Bags //Retrieve all bags 
-                       select bags;  
-            Bags = Bags.Include(b => b.Category).Include(b=>b.Supplier);
+            ViewData["CurSort"] = srtStr;//Store current sort for pagination in the view
 
-            if (catID!=null)   //If filter exists, retrieve those bags
+            //When users search, go back to page 1
+            //Otherwise keep the current search condition to retrieve data
+            if (srcStr != null)
             {
                 page = 1;
             }
             else
             {
-                catID = currentCat;
+                srcStr = curFilter;
+            }
+            ViewData["CurSearch"] = srcStr; //Store current search for pagination in the view
+
+            //When users choose category, go back to page 1
+            //Otherwise keep current category selection to retrieve data
+            if (catID != null)  //When no new catID passed in, catID here is the last one
+            {
+                page = 1;
+            }
+            else
+            {
+                catID = curCat;
+            }
+            ViewData["CurCat"] = catID;  //Store the current category for pagination in the view
+
+            //Retrieve all bags with navigation properties
+            //Then filter data according to parameters
+            var Bags = from bags in _context.Bags
+                       select bags;
+            Bags = Bags.Include(b => b.Category).Include(b => b.Supplier);
+
+            //If users search, ignore category selection
+            if (!String.IsNullOrEmpty(srcStr))
+            {
+                Bags = Bags.Where(b => b.BagName.Contains(srcStr) || b.Category.CategoryName.Contains(srcStr));
             }
 
-            ViewData["CurrentCat"] = catID;  //Store the current selection of category
-
-            if (catID != null)  //When no new catID passed in, catID here is the last one
+            if (catID != null)
             {
                 Bags = GetBagsByCat(Bags, catID);
             }
+
+            if (srtStr == "price")
+            {
+                Bags = Bags.OrderByDescending(b => b.Price);
+            }
+            else
+            {
+                Bags = Bags.OrderBy(b => b.BagName);
+            }
+
+            /*View by category*/
 
             //var applicationDbContext = _context.Bags.Include(b => b.Category).Include(b => b.Supplier);
             return View(await PageList<Bag>.CreateAsync(Bags.AsNoTracking(), page ?? 1, pagesize));
@@ -57,22 +99,10 @@ namespace QualityBags.Controllers
 
         private IQueryable<Bag> GetBagsByCat(IQueryable<Bag> bags, int? catid)
         {
-            IQueryable<Bag> Bags = bags.Where(b => b.Category.CategoryID==catid);
+            IQueryable<Bag> Bags = bags.Where(b => b.Category.CategoryID == catid);
             return Bags;
         }
 
-        //private void UpdateCatForAllBags()
-        //{
-        //    var bags = from b in _context.Bags
-        //               select b;
-        //    foreach(var b in bags)
-        //    {
-        //        b.Category = _context.Categories.Single(c => c.CategoryID == b.CategoryID);
-        //        b.Supplier = _context.Suppliers.Single(s => s.SupplierID == b.SupplierID);
-        //        _context.Update(b);
-        //    }
-        //    _context.SaveChanges();
-        //}
 
         public IActionResult About()
         {

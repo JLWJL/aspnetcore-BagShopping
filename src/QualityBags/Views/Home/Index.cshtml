@@ -55,50 +55,50 @@
         <div id="content-control-tool">
             <div id="sort-control" class="">
                 <label class="control-label">Sort</label>
-                <select class="">
-                    <option value="">- Sort Criteria -</option>
+                <select class="sort-option" asp-items="@ViewBag.SortSelection">
+                    <option selected="selected" value="">- Sort Criteria -</option>
                 </select>
             </div>
             <div id="search-control">
                 <form asp-action="Index" asp-controller="Home" method="get">
-                    <input type="text" name="SearchString" value="@ViewData["CurrentFilter"]" />
+                    <input type="text" name="srcStr" value="@ViewData["CurrentFilter"]" />
                     <input type="submit" value="Search" class="btn btn-default btn" />
                 </form>
             </div>
         </div>
     </aside>
-<div class="row text-center product-area">
-    @{
-        var count = 0;
-        foreach (var bag in Model)
-        {
-            if (++count % 5 == 0)
+    <div class="row text-center product-area">
+        @{
+            var count = 0;
+            foreach (var bag in Model)
             {
-                @:</div>
-                    @:<div class="row text-center">
+                if (++count % 5 == 0)
+                {
+                    @:</div>
+                     @:<div class="row text-center">
             }
 
-            <div class="col-md-3 col-sm-6 bag-container">
-                <div class="thumbnail">
-                    <img src="@Href("~"+bag.ImagePath)" alt="@bag.BagName" class="img img-responsive bag-img">
-                    <div class="caption">
-                        <h4>@bag.BagName - @Html.DisplayFor(b => bag.Category.CategoryName)</h4>
+                <div class="col-md-3 col-sm-6 bag-container">
+                    <div class="thumbnail">
+                        <img src="@Href("~"+bag.ImagePath)" alt="@bag.BagName" class="img img-responsive bag-img">
+                        <div class="caption">
+                            <h4>@bag.BagName - @Html.DisplayFor(b => bag.Category.CategoryName)</h4>
 
-                        <p>
-                            <span>$ @bag.Price</span>
-                            <a class="btn btn-primary" asp-controller="ShoppingCarts" asp-action="AddToCart" asp-route-id="@bag.BagID">Add</a>
-                        </p>
+                            <p>
+                                <span>$ @bag.Price</span>
+                                <a class="btn btn-primary" asp-controller="ShoppingCarts" asp-action="AddToCart" asp-route-id="@bag.BagID">Add</a>
+                            </p>
+                        </div>
                     </div>
                 </div>
-            </div>
+
+            }
 
         }
 
-    }
 
 
-
-</div>
+    </div>
 
     @{
         var prevDisabled = !Model.HasPreviousPage ? "disabled" : "";
@@ -106,19 +106,20 @@
     }
     <div class="text-center">
         <a asp-action="Index"
-           asp-route-sortOrder="@ViewData["CurrentSort"]"
+           asp-route-srtStr="@ViewData["CurSort"]"
            asp-route-page="@(Model.PageIndex - 1)"
-           asp-route-currentCat="@ViewData["CurrentCat"]"
+           asp-route-curCat="@ViewData["CurCat"]"
+           asp-route-curFilter="@ViewData["CurSearch"]"
            class="btn btn-default @prevDisabled pg-pre">
             <span class="glyphicon glyphicon-step-backward"></span>Previous
         </a>
         <a asp-action="Index"
-           asp-route-sortOrder="@ViewData["CurrentSort"]"
+           asp-route-srtStr="@ViewData["CurSort"]"
            asp-route-page="@(Model.PageIndex + 1)"
-           asp-route-currentCat="@ViewData["CurrentCat"]"
+           asp-route-curCat="@ViewData["CurCat"]"
+           asp-route-curFilter="@ViewData["CurSearch"]"
            class="btn btn-default @nextDisabled pg-next">
             Next<span class="glyphicon glyphicon-step-forward"></span>
         </a>
     </div>
 </div>
-
