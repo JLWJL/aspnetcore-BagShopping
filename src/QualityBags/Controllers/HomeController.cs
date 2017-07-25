@@ -7,7 +7,7 @@ using QualityBags.Data;
 using Microsoft.EntityFrameworkCore;
 using QualityBags.Models;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using System.Collections;
+using Newtonsoft.Json;
 
 namespace QualityBags.Controllers
 {
@@ -20,7 +20,87 @@ namespace QualityBags.Controllers
             _context = context;
         }
 
-        public async Task<IActionResult> Index(
+
+        public async Task<IActionResult> Index()
+        {
+            int pagesize = 8;
+
+            //UpdateCatForAllBags();
+            ViewBag.AllCategory = await _context.Categories.ToListAsync();//For category options
+
+            //Pass sort selections 1
+            ViewBag.SortSelection = new List<SelectListItem> {
+                    new SelectListItem {Text="Name", Value= "name" },
+                    new SelectListItem { Text = "Price", Value = "price" }
+            };
+
+            //Pass sort selections 2
+            ViewBag.Options = new List<String>
+            {
+                "Name",
+                "Price"
+            };
+
+            //ViewData["CurSort"] = srtStr;//Store current sort for pagination in the view
+
+            ////When users search, go back to page 1
+            ////Otherwise keep the current search condition to retrieve data
+            //if (srcStr != null)
+            //{
+            //    page = 1;
+            //}
+            //else
+            //{
+            //    srcStr = curFilter;
+            //}
+            //ViewData["CurSearch"] = srcStr; //Store current search for pagination in the view
+
+            ////When users choose category, go back to page 1
+            ////Otherwise keep current category selection to retrieve data
+            //if (catID != null)  //When no new catID passed in, catID here is the last one
+            //{
+            //    page = 1;
+            //}
+            //else
+            //{
+            //    catID = curCat;
+            //}
+            //ViewData["CurCat"] = catID;  //Store the current category for pagination in the view
+
+            //Retrieve all bags with navigation properties
+            //Then filter data according to parameters
+            var Bags = from bags in _context.Bags
+                       select bags;
+            Bags = Bags.Include(b => b.Category).Include(b => b.Supplier);
+
+            ////If users search, ignore category selection
+            //if (!String.IsNullOrEmpty(srcStr))
+            //{
+            //    Bags = Bags.Where(b => b.BagName.Contains(srcStr) || b.Category.CategoryName.Contains(srcStr));
+            //}
+
+            //if (catID != null)
+            //{
+            //    Bags = GetBagsByCat(Bags, catID);
+            //}
+
+            //if (srtStr == "price")
+            //{
+            //    Bags = Bags.OrderByDescending(b => b.Price);
+            //}
+            //else
+            //{
+            //    Bags = Bags.OrderBy(b => b.BagName);
+            //}
+
+            /*View by category*/
+
+            //var applicationDbContext = _context.Bags.Include(b => b.Category).Include(b => b.Supplier);
+            return View(await PageList<Bag>.CreateAsync(Bags.AsNoTracking(), 1, pagesize));
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> FilteredBags(
             int? catID,
             int? curCat,
             string srcStr,
@@ -29,15 +109,6 @@ namespace QualityBags.Controllers
             int? page)
         {
             int pagesize = 8;
-
-            //UpdateCatForAllBags();
-            ViewBag.AllCategory = await _context.Categories.ToListAsync();//For category options
-
-            //Pass sort selections
-            ViewBag.SortSelection = new List<SelectListItem> {
-                    new SelectListItem {Text="Name", Value= "name" },
-                    new SelectListItem { Text = "Price", Value = "price" }
-            };
 
             ViewData["CurSort"] = srtStr;//Store current sort for pagination in the view
 
@@ -65,11 +136,9 @@ namespace QualityBags.Controllers
             }
             ViewData["CurCat"] = catID;  //Store the current category for pagination in the view
 
-            //Retrieve all bags with navigation properties
-            //Then filter data according to parameters
             var Bags = from bags in _context.Bags
                        select bags;
-            Bags = Bags.Include(b => b.Category).Include(b => b.Supplier);
+            //Bags = Bags.Include(b => b.Category).Include(b => b.Supplier);
 
             //If users search, ignore category selection
             if (!String.IsNullOrEmpty(srcStr))
@@ -82,7 +151,7 @@ namespace QualityBags.Controllers
                 Bags = GetBagsByCat(Bags, catID);
             }
 
-            if (srtStr == "price")
+            if (srtStr == "Price")
             {
                 Bags = Bags.OrderByDescending(b => b.Price);
             }
@@ -91,11 +160,20 @@ namespace QualityBags.Controllers
                 Bags = Bags.OrderBy(b => b.BagName);
             }
 
-            /*View by category*/
+            //var json= JsonConvert.SerializeObject(PageList<Bag>.CreateAsync(Bags.AsNoTracking(), page ?? 1, pagesize));
+            //var json  = Json(PageList<Bag>.CreateAsync(Bags.AsNoTracking(), page ?? 1, pagesize));
+            //return json;
 
-            //var applicationDbContext = _context.Bags.Include(b => b.Category).Include(b => b.Supplier);
-            return View(await PageList<Bag>.CreateAsync(Bags.AsNoTracking(), page ?? 1, pagesize));
+            var baglist = PageList<Bag>.CreateAsync(Bags.AsNoTracking(), page ?? 1, pagesize);
+            var jbags = baglist.Result.ToString();
+
+            return Json(JsonConvert.SerializeObject(baglist));
+
+            //var jsonbags = PageList<Bag>.CreateAsync(Bags.AsNoTracking(), page ?? 1, pagesize).Result;
+            //return jsonbags;
         }
+
+
 
         private IQueryable<Bag> GetBagsByCat(IQueryable<Bag> bags, int? catid)
         {
