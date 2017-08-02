@@ -21,6 +21,8 @@
         <link rel="manifest" href="~/favicon/manifest.json">
 
         <meta name="theme-color" content="#ffffff">
+
+        @*@RenderSection("scripts", required: false)*@
     </environment>
     <environment names="Staging,Production">
         <link rel="stylesheet" href="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.6/css/bootstrap.min.css"
@@ -38,8 +40,10 @@
 
         <meta name="theme-color" content="#ffffff">
 
+     @*   @RenderSection("scripts", required: false)*@
     </environment>
     @Html.ApplicationInsightsJavaScript(TelemetryConfiguration)
+     
 
 </head>
 <body>

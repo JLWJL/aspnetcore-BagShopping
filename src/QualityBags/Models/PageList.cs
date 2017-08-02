@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,24 +7,28 @@ using System.Threading.Tasks;
 
 namespace QualityBags.Models
 {
-    public class PageList<T>:List<T>
+    public class PageList<T>
     {
-        public int PageIndex { get; private set; }
+        private bool hasPre;
+        private bool hasNext;
+        public int CurPage { get; private set; }
         public int TotalPages { get; private set; }
+        public List<T> PagedBagList { get; private set; }
 
         public PageList(List<T> items, int count, int pageIndex, int pageSize)
         {
-            PageIndex = pageIndex;
             TotalPages = (int)Math.Ceiling(count / (double)pageSize);
-
-            this.AddRange(items);
+            CurPage = pageIndex;
+            hasPre = HasPreviousPage;
+            hasNext = HasNextPage;
+            PagedBagList=items;
         }
 
         public bool HasPreviousPage
         {
             get
             {
-                return (PageIndex > 1);
+                return (CurPage > 1);
             }
         }
 
@@ -31,7 +36,7 @@ namespace QualityBags.Models
         {
             get
             {
-                return (PageIndex < TotalPages);
+                return (CurPage < TotalPages);
             }
         }
 

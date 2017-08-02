@@ -34,11 +34,6 @@ if (document.querySelector('#uploadFile')) {
 
 /*Used for all users to sort product according to price or created date*/
 
-document.querySelector(".sort-option").onchange = function () {
-    var curUrl = window.location.href;
-    window.location.href = "?srtStr=" + this.value;
 
-    console.log(this.value);
-}
 
 
