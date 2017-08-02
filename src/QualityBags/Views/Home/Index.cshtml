@@ -68,7 +68,7 @@
                 </select>
             </div>
             <div id="search-control">
-                <form asp-action="Index" asp-controller="Home" method="get">
+                <form>
                     <input type="text" name="srcStr" value="@ViewData["CurrentFilter"]" />
                     <input type="submit" value="Search" class="btn btn-default filter-option" />
                 </form>
@@ -78,12 +78,12 @@
     <div class="row text-center product-area">
         @{
             var count = 0;
-            foreach (var bag in Model)
+            foreach (var bag in Model.PagedBagList)
             {
                 if (++count % 5 == 0)
                 {
                     @:</div>
-                     @:<div class="row text-center">
+                     @:<div class="row text-center product-area">
             }
 
                 <div class="col-md-3 col-sm-6 bag-container">
@@ -121,11 +121,11 @@
            class="btn btn-default @prevDisabled pg-pre">
             <span class="glyphicon glyphicon-step-backward"></span>Previous
         </a>*@
-        <a class="btn btn-default @prevDisabled filter-option pg-pre" data-page="@(Model.PageIndex-1)">
+        <a class="btn btn-default @prevDisabled filter-option pg-pre" data-page="@(Model.CurPage-1)">
             <span class="glyphicon glyphicon-step-backward"></span>Previous
         </a>
 
-        <a class="btn btn-default @nextDisabled filter-option pg-next" data-page="@(Model.PageIndex+1)">
+        <a class="btn btn-default @nextDisabled filter-option pg-next" data-page="@(Model.CurPage+1)">
             Next<span class="glyphicon glyphicon-step-forward"></span>
         </a>
 
