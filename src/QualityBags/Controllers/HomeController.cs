@@ -59,7 +59,7 @@ namespace QualityBags.Controllers
 
             var Bags = from bags in _context.Bags
                        select bags;
-            Bags = Bags.Include(b => b.Category).Include(b => b.Supplier);
+            //Bags = Bags.Include(b => b.Category).Include(b => b.Supplier);
 
             //If users search, ignore category selection
             if (!String.IsNullOrEmpty(srcStr))

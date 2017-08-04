@@ -8,6 +8,7 @@
 *.sln.docstates
 
 appsettings.json
+*.pubxml
 
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
