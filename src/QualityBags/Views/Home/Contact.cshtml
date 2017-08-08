@@ -4,10 +4,20 @@
 <h2>@ViewData["Message"]</h2>
 <hr />
 <br />
-<address>
-    <h3>Quality Bags Ltd.</h3><br /><br />
-    <b>Address: </b>139, Carrington Rd, Auckland, NZ<br /><br />
-    <b>Phone: </b>09-12345670 <br /><br />
-    <b>Email: </b><a href="mailto:admin@qbags.com">admin@qbags.com</a>
-</address>
 
+
+<div class="geo-info">
+    <h3>Quality Bags Ltd.</h3> <br/>
+    <div id="gMap"></div>
+   
+    <div class="addr-info">
+        <address>
+            <b>Address: </b>139, Carrington Rd, Auckland, NZ<br /><br />
+            <b>Phone: </b>09-12345670 <br /><br />
+            <b>Email: </b><a href="mailto:admin@qbags.com">admin@qbags.com</a>
+        </address>
+    </div>
+</div>
+
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDkO-8gFwn4lCtJBZI4MKa_nM33toMMfAU"></script>
+<script src="~/js/GMap.js"></script>

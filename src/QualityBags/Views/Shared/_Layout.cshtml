@@ -61,15 +61,15 @@
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
 
-                    <li class="dropdown">
-                        <a class="dropdown-toggle" data-toggle="dropdown">Quality Bags</a>
-                        <ul class="dropdown-menu">
+                    <li>
+                        <a asp-controller="Home" asp-action="Index">Browse All</a>
+                        @*<ul class="dropdown-menu">
 
                             <li><a asp-area="" asp-controller="Home" asp-action="Index" asp-route-catFilter="">ALL BAGS</a></li>
                             @*why model passed in this page is Bag, how pass categories in db?*@
 
-                            @await Html.PartialAsync("_categoryPartialView", new List<QualityBags.Models.Category>() { new QualityBags.Models.Category { CategoryID = 123, CategoryName = "Test" } })
-                        </ul>
+                            @*@await Html.PartialAsync("_categoryPartialView", new List<QualityBags.Models.Category>() { new QualityBags.Models.Category { CategoryID = 123, CategoryName = "Test" } })
+                          </ul>*@
                     </li>
                     <li><a asp-action="Contact" asp-controller="Home">Contact</a></li>
                     <li><a asp-action="About" asp-controller="Home">About</a></li>
@@ -145,6 +145,8 @@
         </section>
     </div>
 
+    @RenderSection("scripts", required: false)
+
     <environment names="Development">
         <script src="~/lib/jquery/dist/jquery.js"></script>
         <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
@@ -162,7 +164,6 @@
         <script src="~/js/site.min.js" asp-append-version="true"></script>
     </environment>
 
-    @RenderSection("scripts", required: false)
 
     <script>
 
